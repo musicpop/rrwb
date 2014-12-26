@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="styles/home.css" rel="stylesheet" type="text/css" />
+<script src="/scripts/jquery-2.1.1.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    //$("#province_city").html("省份-城市");
+    $.ajax({
+      url: '/crud/user/show',
+      type: 'POST',
+      dataType: 'json',
+      data: {param1: 'value1'},
+    })
+    .done(function(response) {
+       if(response.rows == 1 ){
+            //$( "#login_a").attr('href', 'home.html?_id='+response.data[0]._id);   
+        }
+      console.log(response.data);
+    })
+    .fail(function() {
+      console.log("error");
+    })
+    .always(function() {
+      console.log("complete");
+    });
+    
+  });
+</script>
+
+<title>个人主页 - 畅享微博</title>
+</head>
+
+<body>
+<div id="global_header">
+        <!--顶部导航栏开始-->
+        <div class="header">
+              <div class="header_logo"><img src="images/logo_update_02.png" width="190" height="34" />    </div>
+              <div class="header_Llist">
+                    <ul>
+                        <li><a href="#">首页</a></li>
+                        <li><a href="guangchang.html" target="_blank">广场</a></li>
+                        <li><a href="#">微群</a></li>
+                        <li><a href="#">应用</a></li>
+                        <li><a href="#">游戏</a></li>
+                    </ul>
+              </div>
+              <div class="header_M">
+              <div class="header_Mi">
+                    <form action="" method="post" name=""><input type="text" value="请输入搜索内容" class="bb" />
+                     </form>
+                    </div>
+                     <div class="header_Ms"><a href="#"><img src="images/sou_08.gif"  /></a></div>
+              </div>
+              <div class="header_Rlist">
+                    <ul>
+                        <li><a href="#">某人</a></li>
+                        <li><a href="#">手机</a></li>
+                        <li><a href="#">消息</a></li>
+                        <li><a href="changeinfo.html" target="_blank">修改资料</a></li>
+                    </ul>
+              </div>
+        </div>
+      <!--顶部导航栏结束-->
+</div>
+<!--顶部导航部分结束-->
+<div id="global">
+<!--顶部导航部分开始-->
+<!--内容部分开始-->
+<div id="content">
+    <div class="cont_Left">
+      <div class="cont_Leftone">
+                <div class="cont_ontleft"><img src="images/25 (5).png"  /></div>
+                       <div class="cont_oneright">
+                                       <span id="user_name" class="cont_oneright_name">user_name</span><br />
+                                       <span id="province_city" class="cont_oneright_adrs">河北&nbsp;邯郸</span><br />
+
+                                       <span class="cont_oneright_se"><a href="index.html" class="wficon"><em class="W_ficon">+</em>关注</a>&nbsp;|&nbsp;粉丝&nbsp;</span>
+                         
+        </div>
+                        <div class="cont_onebottom">http:www.baidu.com/logo?i=4</div>
+      </div>
+                      
+               <div class="cont_Lefttwo">
+                       <span class="cont_two_n"><img src="images/mark_icon.png" /> 每日记事</span>
+                       <span class="cont_two_note">我今天的任务是！</span>
+               </div>
+               <div class="cont_Leftthree">
+                          <div class="cont_threetop">
+                                    <span class="cont_tretop1 cont_two_n"><img src="images/mark_icon.png" /> 我关注</span>
+                                    <span class="cont_tretop2">更多</span>
+                             
+                          </div>  
+                          <div class="cont_threeMd">
+                              <ul>
+                                  <li class="cont_threemain">
+								  <a href="friend.html">
+                                      <img src="images/image_016.jpeg" class="cont_threeuser" /></a> <div class="cont_threename">
+									 <a href="friend.html" >高鑫</a></div>
+									  </li>
+                              
+                                  <li class="cont_threemain">
+                                      <img src="images/image_004.jpeg" class="cont_threeuser" />
+                                      <div class="cont_threename">一休哥</div
+                                  ></li>
+                                  <li class="cont_threemain">
+                                      <img src="images/image_005.jpeg" class="cont_threeuser" />
+                                      <div class="cont_threename">三毛</div
+                                  ></li>
+                                 <li class="cont_threemain">
+                                      <img src="images/image_006.jpeg" class="cont_threeuser" />
+                                      <div class="cont_threename">雷锋哥哥</div
+                                  ></li>
+                                   
+                                  <li class="cont_threemain">
+                                      <img src="images/image_009.jpeg" class="cont_threeuser" />
+                                      <div class="cont_threename">雪青</div
+                                  ></li>
+                                 
+                                  <li class="cont_threemain">
+                                      <img src="images/image_022.jpeg" class="cont_threeuser" />
+                                      <div class="cont_threename">马可波罗</div
+                                  ></li>
+                                  
+                                 <li class="cont_threemain">
+                                      <img src="images/image_014.jpeg" class="cont_threeuser" />
+                                      <div class="cont_threename">沐雨</div
+                                  ></li>
+                                 
+                                  
+                              </ul>
+                          </div>    
+               </div>
+               <div class="cont_Leftfour"></div>
+    </div>
+    <div id="cont_Right">
+          <div class="cont_Rightb">
+            <div id="share">
+                <div id="word"><img src="images/send_weibo.png" /></div>
+                <div id="box">
+                    <div class="box1">
+                     <input name="" type="text" class="box2" />
+                    </div>
+                </div>
+                    <div id="tips">
+                            <div id="look"><img src="images/ico_01.jpg" /><span class="look1">表情</span></div>
+                            <div id="picture"><img src="images/ico_02.jpg" /><span class="look1">图片</span></div>
+                            <div id="vedio"><img src="images/ico_03.jpg" /><span class="look1">视频</span></div> 
+                            <div id="music"><img src="images/ico_04.jpg" /><span class="look1">音乐</span></div>
+                            <div id="topic"><img src="images/ico_05.jpg" /><span class="look1">话题</span></div>
+                                <div id="vote"><img src="images/ico_06.jpg" /><span class="look1">投票</span></div> 
+                            </div>
+                    <div id="submit">
+                        <div id="sub"><input name="submit" type="button" value="发布" />
+                        </div>
+                    
+                     </div>
+            </div>
+            <div class="cont_Rightwo">
+            
+                <span class="cont_rtd">
+                    可能感兴趣的人
+                    <a href="#">[换一换]
+                    </a>&nbsp;&nbsp;<a href="#">[全部]</a>
+                </span>
+                <span class="cont_rtp"><img src="images/image_013.jpeg" class="cont_rtp1" />
+                <span class="cont_rtp2">李培<br />文艺青年<br />加关注</span>
+                </span>
+                <span class="cont_rtp"><img src="images/image_014.jpeg" class="cont_rtp1" />
+                <span class="cont_rtp2">清风<br />无声留香去<br />加关注</span>
+                </span>
+                <span class="cont_rtp"><img src="images/image_015.jpeg" class="cont_rtp1" />
+                <span class="cont_rtp2">沐雨<br />念月万物生<br />加关注</span>
+                </span>
+            </div>
+      <div class="cont_rtdown">
+                     <div class="cont_down1">
+                         <ul>
+                             <li>全部微博</li>
+                             <li>我的微群</li>
+                             <li>猜你喜欢</li>
+                             <li>提到我的</li>
+                         </ul>
+                     <div class="cont_down3">更多</div>
+                    </div>
+                    <div class="cont_down12">
+                     <ul>
+                         <li>全部</li>
+                         <li>相互关注</li>
+                         <li>悄悄关注</li>
+                         <li>特别关注</li>
+                         <li>同学</li>
+                         <li>同事</li>
+                      
+                     </ul>
+           </div>
+                 
+           <div class="cont_down41">
+              <div class="cont_down4_a"><img src="images/image_009.jpeg" class="picture1" /></div>
+              <div class="cont_down4_b"><span class="fo">张小娴：</span>世界上最美丽的天坑，阿曼Bimmah天坑，这里风景如画，游客还可以在天坑内游泳，当然这里的游客少的可怜。该天坑宽40米、深20米。地质学家说，它是石灰岩洞穴坍塌造成的，而当地人则说，它是月亮上掉下来的一块碎片砸进地里造成的。
+              #旅行#[图片]<img src="images/4c1d5964jw1dun6cuiqtrj.jpg" />
+</div>
+           </div>
+           <div class="cont_down4">
+              <div class="cont_down4_a"><img src="images/image_021.jpeg" class="picture1" /></div>
+              <div class="cont_down4_b"><span class="fo">颐年康盛宋海峰：</span>精华中医，价值岂需上天贴金；糟粕宣传，思路永放虚假光芒。 //@阜外医院宋雷:航天员们也没办法，领导指示行政任务而已，不是中医助力航天事业，而是航天事业成为中医宣传的工具。
+              #旅行#[图片]<br /><img src="images/646dc0a1jw1dun0aptajgj.jpg" />
+</div>
+           </div>
+           <div class="cont_down4">
+              <div class="cont_down4_a"><img src="images/image_020.jpeg" class="picture1" /></div>
+              <div class="cont_down4_b"><span class="fo">烟台交通广播：</span>从今年暑假起,高考成绩不理想,想复读只能选择民办学校。记者从相关部门了解到,烟台现有的公办高考补习学校今后将全部撤销、停止招生。目前,烟台共有8所非学历民办高中可接纳复读生就读,另外部分中等职业
+              学校也开设了相关课程。<br /><img src="images/4c1d5964jw1dun6cuiqtrj.jpg" />
+</div>
+           </div>
+           <div class="cont_down4">
+           
+              <div class="cont_down4_a"><img src="images/image_012.jpeg" class="picture1" /></div>
+              <div class="cont_down4_b"><span class="fo">医生哥波子：</span>发表了博文 《独立思维才能造就集体智慧》 - 最近在读华尔街日报《独立思维才能造就集体智慧》一文，也在看电视剧《下海》旷大成集资和陈志平在处理拖欠工人工资的那个场面，不同的阶层有不同的根植文化，但是 http://t.cn/zW593MF
+              #旅行#[图片]<img src="images/68544d04jw1dumxfxrm8pj.jpg" />
+</div>
+           </div>
+        </div>
+    
+    </div>
+    </div>
+</div>
+<!--内容部分结束-->
+<div id="btm">
+<div id="footer">
+        	<ul>
+            	<li><a href="#">团队简介</a></li>
+                <li><a href="#">联系方式</a></li>
+                <li><a href="#">网站地图</a></li>
+                <li><a href="#">达人认证</a></li>
+                <li><a href="#">开放平台</a></li>
+                <li><a href="#">信息举报</a></li>
+           	</ul>
+ 
+        </div>
+        </div>
+
+
+</div>
+</body>
+</html>
