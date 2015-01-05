@@ -5,7 +5,7 @@
 <title>畅享微博</title>
 <link rel="stylesheet" type="text/css" href="styles/index.css" />
 <script language="javascript" type="text/javascript" src="scripts/index.js"></script>
-<script src="scripts/jquery-2.1.1.js"></script>
+<script language="javascript" type="text/javascript" src="scripts/jquery-2.1.1.js"></script>
 <script language="javascript" type="text/javascript" src="scripts/move.js"></script>
 <script type="text/javascript">
  
@@ -17,25 +17,15 @@ function scrolls(obj){
    }
    if(obj.scrollLeft>=obj.firstChild.offsetWidth)obj.scrollLeft=0;
 }
-window.onload=function(){
-
-    var myMar=setInterval("scrolls(document.getElementById('gundong'))",20);
-document.getElementById('gundong').onmousemove=function(){ clearInterval(myMar) };
-document.getElementById('gundong').onmouseout=function(){ myMar=setInterval("scrolls(document.getElementById('gundong'))",20) };
-//End:公告消息滚动
-
-        }
+ 
 $(document).ready(function() {
-    $( "#login_a" ).click(function(event) {
-            /* Act on the event */
-            //alert("click a");
-            
-            var usrname=document.getElementById("usrname");
+    $( "#login_btn" ).click(function(event) {
+    var login_name=document.getElementById("login_name");
     var password=document.getElementById("password");
-    usrname.value=usrname.value.replace(/\s{1,}/g,"");
-    if (usrname.value=="请输入邮箱/会员账号/手机号"){
+    login_name.value=login_name.value.replace(/\s{1,}/g,"");
+    if (login_name.value=="请输入邮箱/会员账号"){
         alert("请输入账户！");
-        usrname.focus();
+        login_name.focus();
         return;
     }
     if (password.value==""){
@@ -47,7 +37,7 @@ $(document).ready(function() {
         url: '/crud/user/login',
         type: 'POST',
         dataType: 'json',
-        data: {user_email: usrname.value,pwd:password.value},
+        data: {login_name: login_name.value,pwd:password.value},
     })
     .done(function(response) {
         if(response.rows == 1 ){
@@ -137,13 +127,13 @@ $(document).ready(function() {
         	<div id="kaitong"><a href="regist.html" target="_blank"><img src="images/kaitong.jpg" alt="开通微博" border="0px" /></a></div>
             <div id="loginbox">
 		    <form id="loginform" name="loginform"  action="" method="post">
-            	<input id="usrname" class="inputbox" name="usrname" type="text" value="请输入邮箱/手机号"  onclick="this.focus();OnEnter(this)"
+            	<input id="login_name" class="inputbox" name="login_name" type="text" value="请输入邮箱/手机号"  onclick="this.focus();OnEnter(this)"
  onmouseout="this.blur();OnExit(this);"/>
                 <input id="password" class="inputbox" name="password" type="password" value="" onclick="this.focus();OnEnter(this)"
  onmouseout="this.blur();OnExit(this);" />
   				<div id="auto"><input name="checkbox" type="checkbox" />下次自动登录</div>
                     <div id="forgetpwd"><a href="password.html" target="_blank">忘记密码？</a></div>
-                    <div id="denglu"><a id="login_a" href="home.html"><img src="images/login_button.jpg" border="0px"/></a></div>
+                    <div id="denglu"><input type="button" id = "login_btn" name="login_btn" value="保存"/> </div>
             </form>
             </div>
             <div id="fenge"></div>

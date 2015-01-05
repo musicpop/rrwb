@@ -6,13 +6,126 @@
 <link rel="stylesheet" type="text/css" href="styles/changeinfo.css"/>
  <link rel="stylesheet" type="text/css" href="styles/imgareaselect-default.css" /> 
  <script language="javascript" type="text/javascript" src="scripts/jquery-2.1.1.js"></script>
-  <script type="text/javascript" src="scripts/jquery.imgareaselect.pack.js"></script>
+<script type="text/javascript" src="scripts/jquery.imgareaselect.pack.js"></script>
 <script language="javascript" type="text/javascript" src="scripts/warning.js"></script>
-
-<script language="javascript" type="text/javascript" src="scripts/jquery.Jcrop.js"></script>
+<script language="javascript" type="text/javascript" src="scripts/changeinfo.js"></script>
+<script language="javascript" type="text/javascript" src="scripts/index.js"></script>
 <script>
-
+  
 $(document).ready(function() {
+   //-------------------加载省份 城市数据---------------------------------------
+   $("select[name=province]").append("<option value='0'>请选择..</option>");
+   $("select[name=city]").append("<option value='0'>请选择..</option>");
+   $.ajax({
+    url: '/xml/Provinces.xml',
+    type: 'GET',
+    dataType: 'xml',
+    data: {param1: 'value1'},
+   })
+   .done(function(xmldoc) {
+     console.log("load provinces success");
+     var valueList = $(xmldoc).find("Province");
+                     $(valueList).each(function(){
+                        $("select[name=province]").append("<option value='"+$(this).attr("ID")+"'>"+$(this).attr("ProvinceName")+"</option>");
+                     })
+   })
+   .fail(function() {
+    console.log("error");
+   })
+   .always(function() {
+    console.log("complete");
+   });
+   $("select[name=province]").change(function(event) {
+      $("select[name=city]").find("option").remove();
+        $("select[name=city]").append("<option value='0'>请选择..</option>");
+      if($(this).val() == "0"){
+                
+        }else{
+          var selectvalue = $(this).val(); //得到选中国家的value
+            $.ajax({
+                url:"/xml/Cities.xml",
+                type:"get",
+                datatype:"xml",
+                success:function(xml){
+                    var xmldoc = xml;
+                    $(xmldoc).find("Cities>City[PID="+selectvalue+"]").each(function(){
+                    
+                        $("select[name=city]").append("<option value='"+$(this).attr("ID")+"'>"+$(this).attr("CityName")+"</option>");
+ 
+                })
+            }
+        });
+      }
+    });   
+  //-----------------------------------------------------------------------------
+  //--------------------加载数据-------------------------------------------------
+  $.ajax({
+      url: '/crud/user/show',
+      type: 'POST',
+      dataType: 'json',
+      data: {_id: getWindowParam("_id")},
+    })
+    .done(function(response) {
+      
+            $('input[name=_id]').val(response._id);
+            $('input[name=login_name]').val(response.login_name);
+            $('input[name=nick_name]').val(response.nick_name);
+            $('input[name=real_name]').val(response.real_name);
+            $('select[name=province]').val(response.provinceValue);
+            $('select[name=city]').val(response.cityValue);
+            $('input[name=birthday]').val(response.birthday);
+            $('input[name=blog]').val(response.blog);
+            $('input[name=qq]').val(response.qq);
+            $('input[name=msn]').val(response.msn); 
+            $("#crop_preview").removeAttr("style")
+            $("#crop_preview").attr("src", response.img) ;
+     
+    })
+    .fail(function() {
+      console.log("error");
+    })
+    .always(function() {
+      console.log("complete");
+    });
+  //-----------------------------------------------------------------------------
+  //--------------------保存提交-------------------------------------------------
+  $("#save").click(function(e) {
+        e.preventDefault();
+        $.ajax({
+          url: '/crud/user/edit',
+          type: 'post',
+          dataType: 'json',
+          data: {_id:$('input[name=_id]').val() ,
+                login_name:$('input[name=login_name]').val(),
+                nick_name:$('input[name=nick_name]').val(),
+                real_name:$('input[name=real_name]').val(),
+                provinceValue:$('select[name=province]').val(),
+                provinceName:$('select[name=province] option:selected').text(),
+                cityValue:$('select[name=city]').val(),
+                cityName:$('select[name=city] option:selected').text(),
+                birthday:$('input[name=birthday]').val(),
+                img:$("#crop_preview").attr("src"),
+                msn:$('input[name=msn]').val(),
+                qq:$('input[name=qq]').val(),
+                blog:$('input[name=blog]').val()},
+        })
+        .done(function(response) {
+          if(response.code == 1 ){
+            alert("保存成功！");
+            console.log(response.data);
+          }
+          console.log("success");
+        })
+        .fail(function() {
+          console.log("error");
+        })
+        .always(function() {
+          console.log("complete");
+        });
+        
+     });
+  //-----------------------------------------------------------------------------
+  //--------------------头像上传-------------------------------------------------
     $("#file").change(function(){
         var objUrl = getObjectURL(this.files[0]) ;
         console.log("objUrl = "+objUrl) ;
@@ -40,6 +153,12 @@ $(document).ready(function() {
             })
             .done(function(data) {
                 console.log(data);
+                var response = $.parseJSON(data);
+                if(response.code == 1){
+                  $("#crop_preview").removeAttr("style")
+                  $("#crop_preview").attr("src", response.url) ;
+                  alert("上传成功！");
+                }
             })
             .fail(function() {
                 console.log("error");
@@ -47,7 +166,7 @@ $(document).ready(function() {
             .always(function() {
                 console.log("complete");
             });
-            e.preventDefault(); //Prevent Default action.
+             //Prevent Default action.
         }
        else  //for olden browsers
         {
@@ -75,9 +194,10 @@ $(document).ready(function() {
             });
  
          }     
- 
+          e.preventDefault();
      });
- 
+     
+     
      
 });
 //建立一個可存取到該file的url
@@ -99,7 +219,7 @@ function preview(img, selection) {
     var scaleX = 100 / selection.width;
     var scaleY = 100 / selection.height;
 
-    $('#preview_box img').css({
+    $('#crop_preview').css({ 
         width: Math.round(scaleX * 300),
         height: Math.round(scaleY * 300),
         marginLeft: -Math.round(scaleX * selection.x1),
@@ -111,6 +231,7 @@ function preview(img, selection) {
     $('#x2').val(selection.x2);
     $('#y2').val(selection.y2);   
 }
+//-------------------------------------------------------------------------------
 </script>
 </head>
 
@@ -163,64 +284,73 @@ function preview(img, selection) {
                  <div id="top">账号设置</div>
                  <div id="top1"><img src="images/img1.gif" />个人资料&nbsp;预览</div>
                  <div id="top2"><font color="#000000">基本信息</font></div>
-                 <div id="photo"><img src="images/image2.jpg" /><a href="#">修改头像</a></div>
-             </div>
-         
-             
-             <hr/>
-              
-             <div id="leftmid">
-                 <div id="secret"><img src="images/image4.jpg" /><a href="#">隐私设置</a></div>
-                 <div id="mid1"><a href="#">通用</a></div>
-                 <div id="mid2"><a href="#">黑名单</a></div>
-                 <div id="mid3"><a href="#">屏蔽设置</a></div>
-                 <div id="mid4"><a href="#">通知屏蔽</a></div>
-             </div>
-             <hr/>
-              
-             <div id="leftbot">
-                 <div id="secret"><img src="images/img8.jpg" /><a href="#">账号安全</a></div>
-                 <div id="mid3"><a href="#">安全信息</a></div>
-                 <div id="mid3"><a href="#">修改密码</a></div>
  
              </div>
+         
+              
+              
+             
       </div>
     <!---------------------- end 左部-------------------------------->
+
     <!---------------------- begin 右部-------------------------------->
         <div id="rightpart">
+                                   
+                    
             <div id="righttop">基本信息<span id="must">(<font color="#FF0000">&nbsp;*&nbsp;</font>为必填&nbsp;)</span></div>
             <hr style="width:785px"/>
             <div id="topdown">以下信息将显示在<a href="#">个人资料页</a>，方便大家了解你</div>
+             <div id="div_preview" >
+                      <img id="crop_preview" src=""/>   
+                                </div>      
           <span>
             <div id="midleft">登录名：</div>
-                <div id="midright">ddd@126.com &nbsp;&nbsp;<a href="#">修改密码</a></div>
+                <input type="hidden" id="_id" class="y1" name="_id" />
+                <div id="midright"><input id="login_name" name="login_name" type="text" value="" maxlength="8" readonly/></div>
             </span>
             <span>
             <div id="midleft2"><font color="#FF0000">*</font>昵称：</div>
-            <div id="midright2"><input name="name" id="nicheng" type="text" value="abc"/></div>
+            <div id="midright2"><input name="nick_name"  type="text" value="" maxlength="8" required/></div>
             </span>
+            <span>
+            <div id="midleft2">头像：</div>
+             <div id="uploader">
+                    <form name="" id="upload_form" method="post" enctype="multipart/form-data"  >
+                        <div>
+                            <input name="photo" id="file"  size="27" type="file" multiple="multiple"  accept="image/gif, image/jpeg,image/x-png"/>
+                            <input id = "upload_but" name="action" value="上传" type="submit"/>
+                         
+                           
+                                 <input type="hidden" id="y1" class="y1" name="y1" />
+                                <input type="hidden" id="x1" class="x1" name="x1" />
+                                <input type="hidden" id="y2" class="y2" name="y2" />
+                                <input type="hidden" id="x2" class="x2" name="x2" />
+                        </div>   
+                     
+                    </br>
+                         <div id="div_big_view" >
+                            <img id="big_view" src="" />
+                         </div>
+
+                        
+                    </form>
+        
+                </div>
+            </span>  
             <span>
             <div id="midleft2">真实姓名：</div>
             <div id="midright2">
-                <input name="name" type="text" value="李四"/>
-                <select name="public" id="public">
-                <option value="1">仅自己可见</option><option value="2">所有的人可见</option><option value="3">我关注的人可见</option>
-                </select>
+                <input id="real_name" name="real_name" type="text" value="" maxlength="8" required/>
+                 
             </div>
             </span>
             <span>
             <div id="midleft2"><font color="#FF0000">*</font>所在地：</div>
             <div id="midright3">
-         <select name="province" id="province">
-         <option value="1">山东</option><option value="2">北京</option><option value="3">重庆</option><option value="4">福建</option>
-         <option value="5">甘肃</option><option value="6">广东</option><option value="7">广西</option><option value="8">贵州</option>
-         <option value="9">安徽</option><option value="10">海南</option><option value="11">河北</option><option value="12">天津</option>
+         <select name="province" id="province" >
+          
          </select>&nbsp;
-         <select name="city" id="city"><option value="1">淄博</option>
-         <option value="1">不限</option><option value="2">济南</option><option value="3">青岛</option><option value="4">枣庄</option>
-         <option value="5">东营</option><option value="6">烟台</option><option value="7">潍坊</option><option value="8">济宁</option>
-         <option value="9">泰安</option><option value="10">威海</option><option value="11">日照</option><option value="12">莱芜</option>
-         <option value="13">临沂</option><option value="14">德州</option><option value="15">聊城</option><option value="16">菏泽</option>
+         <select name="city" id="city" > 
          </select></div>
             </span>
              <span>
@@ -233,89 +363,37 @@ function preview(img, selection) {
              <span>
             <div id="midleft2">生日：</div>
             <div id="midright3">
-         <select name="year" id="year"><option value="15">1992</option>
-         <option value="1">2012</option><option value="2">2011</option><option value="3">2010</option><option value="4">2009</option>
-         <option value="5">2008</option><option value="6">2007</option><option value="7">2006</option><option value="8">2005</option>
-        <option value="9">2004</option><option value="10">2003</option><option value="11">2002</option><option value="12">2001</option>
-       <option value="10">2000</option><option value="11">1999</option><option value="12">1998</option><option value="13">1997</option>
-       <option value="14">1996</option><option value="15">1995</option><option value="16">1994</option><option value="17">1993</option>
-       <option value="16">1991</option><option value="17">1990</option><option value="18">1989</option>
-         </select>年&nbsp;
-         <select name="month" id="month"><option value="11">11</option>
-         <option value="1">01</option><option value="2">02</option><option value="3">03</option><option value="4">04</option>
-         <option value="5">05</option><option value="6">06</option><option value="7">07</option><option value="8">08</option>
-         <option value="9">09</option><option value="10">10</option><option value="12">12</option>
-          </select>月&nbsp;
-          <select name="day" id="day"><option value="8">08</option>
-         <option value="1">01</option><option value="2">02</option><option value="3">03</option><option value="4">04</option>
-         <option value="5">05</option><option value="6">06</option><option value="7">07</option>
-         <option value="9">09</option><option value="10">10</option><option value="11">11</option><option value="12">12</option>
-         <option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option>
-         <option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option>
-         <option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option>
-         <option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option>
-         <option value="29">29</option><option value="30">30</option><option value="31">31</option>
-          </select>日&nbsp;&nbsp;
-                <select name="public" id="public1"><option value="1">公开完整显示</option>
-                <option value="2">只显示星座</option><option value="3">只显示月日</option><option value="4">保密</option>
-                </select>
-          </div>
+         
+              <input type="date" name="birthday" />
+            </div>
           </span>
           <span>
             <div id="midleft2">博客地址：</div>
             <div id="midright2">
-                <input name="name" type="text" value=""/>
-                <select name="public" id="public">
-                    <option value="1">仅自己可见</option><option value="2">所有的人可见</option><option value="3">我关注的人可见</option>
-                </select>
+                <input name="blog" type="text" value=""/>
+                 
             </div>
           </span>
-            <div id="blogdown">还没有博客？<a href="#">立即开通</a></div>
-            <span>
-                <div id="midleft">联系邮箱：</div>
-                <div id="midright">luoyuliuxing@126.com&nbsp;&nbsp;<a href="#">修改</a></div>
-            </span>
+          
              <span>
             <div id="midleft2">QQ：</div>
             <div id="midright2">
-            <input name="name" type="text" value="583880851"/>
-            <select name="public" id="public">
-                <option value="1">仅自己可见</option><option value="2">所有的人可见</option><option value="3">我关注的人可见</option>
-            </select>
+            <input name="qq" type="text" value=""/>
+           
             </div>
             </span>
              <span>
             <div id="midleft2">MSN：</div>
             <div id="midright2">
-                <input name="name" type="text" value=""/>
-                <select name="public" id="public">
-                    <option value="1">仅自己可见</option><option value="2">所有的人可见</option><option value="3">我关注的人可见</option>
-                </select>
+                <input name="msn" type="text" value=""/>
+                
             </div>
             </span>
-            <span>
-            <div id="midleft2">头像：</div>
-            <div id="uploader">
-                    <form name="" id="upload_form" method="post" enctype="multipart/form-data"  >
-                           <input name="photo" id="file"  size="27" type="file" multiple="multiple"/>   
-                     
-                    </br>
-                        <div style="width: 100px; height: 100px; overflow: hidden;">
-                        <span id="preview_box" class="crop_preview"><img id="crop_preview" src="" style="width: 100px; height: 100px; overflow: hidden;"/> 
-                            <input type="hidden" id="y1" class="y1" name="y" />
-                                <input type="hidden" id="x1" class="x1" name="x" />
-                                <input type="hidden" id="y2" class="y2" name="y1" />
-                                <input type="hidden" id="x2" class="x2" name="x1" />
-                                </div>                             
-                        <input id = "upload_but" name="action" value="上传" type="submit" />
-                    </form>
-        
-                </div>
-            </span><br/>
             
-            <span id="correct"><button type="submit" onclick=" return demo6()"><span>保存</span></button></span>
+            
+            <span id="correct"><button type="submit" id="save" name="save"><span>保存</span></button></span>
         </div>
- 
+        
     <div id="footer">
         <ul>
             <li><a href="#">团队简介</a></li>
@@ -327,6 +405,12 @@ function preview(img, selection) {
         </ul>
         
     </div>
+ 
+       
+ 
+ 
+
+ 
     <!----------------------  End boot --------------------------->
 </div>
     <!---------------------------------------- end 正文------------------------------------------------------->

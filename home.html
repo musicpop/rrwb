@@ -2,22 +2,34 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link href="styles/home.css" rel="stylesheet" type="text/css" />
-<script src="/scripts/jquery-2.1.1.js"></script>
+<link href="styles/home.css" rel="stylesheet" type="text/css" /> 
+<script language="javascript" type="text/javascript" src="scripts/jquery-2.1.1.js"></script>
+<script language="javascript" type="text/javascript" src="scripts/index.js"></script>
+<script language="javascript" type="text/javascript" src="scripts/jquery.loadTemplate-1.4.4.js"></script>
 <script type="text/javascript">
+  // default configuration properties
+    var defaults = {  
+      allowed: 140,   
+      warning: 25, 
+      cssWarning: 'warning',
+      cssExceeded: 'exceeded',
+      counterText: ''
+    }; 
+
   $(document).ready(function() {
-    //$("#province_city").html("省份-城市");
+     
     $.ajax({
       url: '/crud/user/show',
       type: 'POST',
       dataType: 'json',
-      data: {param1: 'value1'},
+      data: {_id: getWindowParam("_id")},
     })
     .done(function(response) {
-       if(response.rows == 1 ){
-            //$( "#login_a").attr('href', 'home.html?_id='+response.data[0]._id);   
-        }
-      console.log(response.data);
+      if(response._id == getWindowParam("_id")){
+        $('#province_city').text(response.provinceName+' '+response.cityName);
+        $('#user_name').text(response.nick_name);
+        
+      }
     })
     .fail(function() {
       console.log("error");
@@ -25,8 +37,175 @@
     .always(function() {
       console.log("complete");
     });
+    $("#weiboTextArea").change(function(event) {
+      var count = $(this).val().length;
+      var available = defaults.allowed - count;
+      if(available <= defaults.warning && available >= 0){
+        $(".aviableCount span").addClass(defaults.cssWarning);
+      } else {
+        $(".aviableCount span").removeClass(defaults.cssWarning);
+      }
+      if(available < 0){
+        $(".aviableCount span").addClass(defaults.cssExceeded);
+      } else {
+        $(".aviableCount span").removeClass(defaults.cssExceeded);
+      }
+      $(".aviableCount span").html(available);
+    });
+    //--------------------------------------------------------
+    $("#file").change(function(event) {
+       if($("#file").val()!=''){
+        $('#notice').text('正在上传').fadeIn();
+        $("#upload_form").submit();
+      }
+      else {
+        $('#notice').hide();
+      }
+    });
     
+    $("#upload_form").submit(function(e) {
+        if(window.FormData !== undefined)  // for HTML5 browsers
+        {
+            var formData = new FormData(this);
+            $.ajax({
+                url: '/crud/uploadServlet',
+                type: 'POST',
+                mimeType:"multipart/form-data",
+                data:formData,
+                contentType: false,
+            cache: false,
+            processData:false
+            })
+            .done(function(data) {
+                console.log(data);
+                var response = $.parseJSON(data);
+                if(response.code == 1){ 
+                  $('#notice').text(response.url)
+                  $("#uploaded_image").val(response.url);
+                  $('#notice').fadeOut();
+                  alert("上传成功！");
+                }
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
+            });
+             //Prevent Default action.
+        }
+       else  //for olden browsers
+        {
+            //generate a random id
+            var  iframeId = 'unique' + (new Date().getTime());
+     
+            //create an empty iframe
+            var iframe = $('<iframe src="javascript:false;" name="'+iframeId+'" />');
+     
+            //hide it
+            iframe.hide();
+     
+            //set form target to iframe
+            $(this).attr('target',iframeId);
+     
+            //Add iframe to body
+            iframe.appendTo('body');
+            iframe.load(function(e)
+            {
+                var doc = getDoc(iframe[0]);
+                var docRoot = doc.body ? doc.body : doc.documentElement;
+                var data = docRoot.innerHTML;
+                //data is returned from server.
+     
+            });
+ 
+         }     
+          e.preventDefault();
+     });
+     
+    //--------------------------------------------------------
+    //--------------------发布微博-------------------------------------------------
+  $("#submitWeiboBtn").click(function(e) {
+        e.preventDefault();
+        $.ajax({
+          url: '/crud/weibo/add',
+          type: 'post',
+          dataType: 'json',
+          data: {user_id:getWindowParam("_id"),
+                 user_nickName:$('#nick_name').val(), 
+                content:$('#weiboTextArea').val(),                 
+                img:$("#uploaded_image").val()},
+        })
+        .done(function(response) {
+          if(response.code == 1 ){
+            alert("保存成功！");
+            $('#weiboTextArea').val('');
+            console.log(response.data);
+          }
+          console.log("success");
+        })
+        .fail(function() {
+          console.log("error");
+        })
+        .always(function() {
+          $("#uploaded_image").val('');
+          console.log("complete");
+        });
+        
+     });
+  //-----------------------------------------------------------------------------
+  //-------------------------------加载微博列表---------------------------------------------
+  $.ajax({
+    url: '/crud/weibo/page',
+    type: 'post',
+    dataType: 'json',
+    data: {param1: 'value1'},
+  })
+  .done(function(response) {
+    if(response.code == 1 && response.rows > 0){
+      var weibos = response.data;
+      $("#weibos").loadTemplate("#template", weibos);
+    }
+    console.log("success");
+  })
+  .fail(function() {
+    console.log("error");
+  })
+  .always(function() {
+    console.log("complete");
   });
+  
+ 
+  //-------------------------------------------------------------------------------
+  $(window).scroll(function () {
+       if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+           alert("oo");
+       }
+   });
+  //-------------------------------------------------------------------------------
+  });
+
+  function zoom_image(obj) {
+    if (obj.hasClass('photoBox')) {
+        var load = obj.find('.loadingBox');
+        load.show();
+        var img = obj.next().find('img');
+        if (img.attr('src') == 'about:blank') {
+            img.attr('src', obj.find('img').attr('src').replace('_small.', '.'));
+            img.load(function() {
+                obj.hide();
+                obj.next().show();
+            });
+        } else {
+            obj.hide();
+            obj.next().show();
+        }
+    } else {
+        obj.hide();
+        obj.prev().show();
+        obj.prev().find('.loadingBox').hide();
+    }
+}
 </script>
 
 <title>个人主页 - 畅享微博</title>
@@ -73,7 +252,7 @@
       <div class="cont_Leftone">
                 <div class="cont_ontleft"><img src="images/25 (5).png"  /></div>
                        <div class="cont_oneright">
-                                       <span id="user_name" class="cont_oneright_name">user_name</span><br />
+                                       <span id="user_name" class="cont_oneright_name"></span><br />
                                        <span id="province_city" class="cont_oneright_adrs">河北&nbsp;邯郸</span><br />
 
                                        <span class="cont_oneright_se"><a href="index.html" class="wficon"><em class="W_ficon">+</em>关注</a>&nbsp;|&nbsp;粉丝&nbsp;</span>
@@ -137,25 +316,33 @@
     <div id="cont_Right">
           <div class="cont_Rightb">
             <div id="share">
-                <div id="word"><img src="images/send_weibo.png" /></div>
+                <div id="word"><img src="images/send_weibo.png" />
+                  <div  class="aviableCount" >还可以输入<span>140</span>字</div></div>
                 <div id="box">
                     <div class="box1">
-                     <input name="" type="text" class="box2" />
-                    </div>
+                     <textarea name="weiboTextArea" id = "weiboTextArea"   class="box2" maxlength="140" ></textarea>
+                    </div> 
                 </div>
                     <div id="tips">
                             <div id="look"><img src="images/ico_01.jpg" /><span class="look1">表情</span></div>
-                            <div id="picture"><img src="images/ico_02.jpg" /><span class="look1">图片</span></div>
-                            <div id="vedio"><img src="images/ico_03.jpg" /><span class="look1">视频</span></div> 
-                            <div id="music"><img src="images/ico_04.jpg" /><span class="look1">音乐</span></div>
-                            <div id="topic"><img src="images/ico_05.jpg" /><span class="look1">话题</span></div>
-                                <div id="vote"><img src="images/ico_06.jpg" /><span class="look1">投票</span></div> 
+                            <form name="" id="upload_form" method="post" enctype="multipart/form-data"  >
+                            <div id="picture"><img src="images/ico_02.jpg" /><span class="look1">
+                            <div class="fileWrapper">
+                            <input name="photo" id="file" class="fileInput" size="27" type="file" />  
+                            <a class="fileButton">图片</a>
+                            
+                             </div>
+                            </span>
                             </div>
+                            <div id="notice" ></div>
+                            <input type="hidden" id="uploaded_image"  name="uploaded_image" />
+                          </form>
                     <div id="submit">
-                        <div id="sub"><input name="submit" type="button" value="发布" />
+                        <div id="sub"><input id = 'submitWeiboBtn' name="submit" type="button" value="发布" />
                         </div>
                     
                      </div>
+                    
             </div>
             <div class="cont_Rightwo">
             
@@ -196,31 +383,9 @@
                      </ul>
            </div>
                  
-           <div class="cont_down41">
-              <div class="cont_down4_a"><img src="images/image_009.jpeg" class="picture1" /></div>
-              <div class="cont_down4_b"><span class="fo">张小娴：</span>世界上最美丽的天坑，阿曼Bimmah天坑，这里风景如画，游客还可以在天坑内游泳，当然这里的游客少的可怜。该天坑宽40米、深20米。地质学家说，它是石灰岩洞穴坍塌造成的，而当地人则说，它是月亮上掉下来的一块碎片砸进地里造成的。
-              #旅行#[图片]<img src="images/4c1d5964jw1dun6cuiqtrj.jpg" />
-</div>
-           </div>
-           <div class="cont_down4">
-              <div class="cont_down4_a"><img src="images/image_021.jpeg" class="picture1" /></div>
-              <div class="cont_down4_b"><span class="fo">颐年康盛宋海峰：</span>精华中医，价值岂需上天贴金；糟粕宣传，思路永放虚假光芒。 //@阜外医院宋雷:航天员们也没办法，领导指示行政任务而已，不是中医助力航天事业，而是航天事业成为中医宣传的工具。
-              #旅行#[图片]<br /><img src="images/646dc0a1jw1dun0aptajgj.jpg" />
-</div>
-           </div>
-           <div class="cont_down4">
-              <div class="cont_down4_a"><img src="images/image_020.jpeg" class="picture1" /></div>
-              <div class="cont_down4_b"><span class="fo">烟台交通广播：</span>从今年暑假起,高考成绩不理想,想复读只能选择民办学校。记者从相关部门了解到,烟台现有的公办高考补习学校今后将全部撤销、停止招生。目前,烟台共有8所非学历民办高中可接纳复读生就读,另外部分中等职业
-              学校也开设了相关课程。<br /><img src="images/4c1d5964jw1dun6cuiqtrj.jpg" />
-</div>
-           </div>
-           <div class="cont_down4">
-           
-              <div class="cont_down4_a"><img src="images/image_012.jpeg" class="picture1" /></div>
-              <div class="cont_down4_b"><span class="fo">医生哥波子：</span>发表了博文 《独立思维才能造就集体智慧》 - 最近在读华尔街日报《独立思维才能造就集体智慧》一文，也在看电视剧《下海》旷大成集资和陈志平在处理拖欠工人工资的那个场面，不同的阶层有不同的根植文化，但是 http://t.cn/zW593MF
-              #旅行#[图片]<img src="images/68544d04jw1dumxfxrm8pj.jpg" />
-</div>
-           </div>
+            <div id = 'weibos'></div>
+        
+          
         </div>
     
     </div>
@@ -243,5 +408,27 @@
 
 
 </div>
+<!-- Template -->
+<script type="text/html" id="template">
+ 
+    <div class="cont_down41">
+              <div class="cont_down4_a"><img  data-src="img" class="picture1" /></div>
+              <div class="cont_down4_b"><div class="fo" data-content="user_nickName"></div>
+              <div data-content="content"></div>
+              <span class="photoBox">
+                <div class="loadingBox">
+                  <span class="loading"></span>
+                </div>
+                <img data-src="img" class="zoom" onclick="zoom_image($(this).parent());"/>
+              </span> 
+              
+              <div class="photoArea" style="display:none;">
+                 <img data-src="url" class="minifier" onclick="zoom_image($(this).parent());" />
+                 
+              </div> 
+ 
+</div>
+           </div>
+</script>
 </body>
 </html>

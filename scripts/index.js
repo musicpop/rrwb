@@ -40,16 +40,7 @@ function login(){
 	
 }
 
-//输入时的动作
-function OnEnter(field){
-	field.focus();
-	if(field.value == field.defaultValue){
-		field.value = "";
-	} 
-}
-function OnExit(field){
-	if(field.value == ""){
-		field.value = field.defaultValue;
-	}
-	field.focus();
+function getWindowParam(name){
+   if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+      return decodeURIComponent(name[1]);
 }

@@ -269,8 +269,7 @@ hr{
 #rightpart{
 	background-color:#FFF;
 	margin:10px 0px 0px 0px;
-	width:810px;
-	height:800px;
+	width:810px; 
 	padding:20px 0px 0px 20px;
 	float:left;
 	font:14px Arial, Helvetica, sans-serif;
@@ -438,5 +437,38 @@ textarea{
 	float:left;
 	list-style-type:none;
 }
-.crop_preview{ top:0; width:120px; height:120px; overflow:hidden;}
+
 /*-------------------------End boot-------------------------------*/
+
+/*-------------------------upload---------------------------------*/
+#uploader {
+	width: 300px;
+	height: 350px; 
+	overflow: hidden; 
+}
+#uploader #div_big_view{
+	width: 300px; 
+	height: 300px; 
+	overflow: hidden;
+	float:left;
+}
+#uploader #big_view{
+	width: 300px; 
+	height: 300px; 
+}
+#div_preview{
+	width: 100px; 
+	height: 100px; 
+ 	float:right;
+	overflow: hidden; 
+	margin-right:20px;
+}
+#crop_preview{
+	width: 100px; 
+	height: 100px; 
+}
+#uploader #upload_but{ 
+}
+
+ 
+ 

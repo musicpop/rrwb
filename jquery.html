@@ -60,7 +60,13 @@
 	 	console.log("complete");
 	 });
 	 
-
+	 $('select[name=cars]').val('2');
+	 //alert($('select[name=cars] option:selected').val());
+	 //alert($('select[name=cars] option:selected').text());
+	 $('input[name=user_date]').change(function(event) {
+	 	/* Act on the event */
+	 	$('input[name=user_date]').val();
+	 });
 	});
 	</script>
 </head>
@@ -83,5 +89,12 @@
 	<time>dd</time>
 
 	<a href="index.html" class="wficon"><em class="W_ficon">+</em>关注</a>
+	<select name="cars">
+<option value="1">Volvo</option>
+<option value="2">Saab</option>
+<option value="3">Fiat</option>
+<option value="4">Audi</option>
+Date: <input type="date" name="user_date" />
+</select>
 </body>
 </html>
