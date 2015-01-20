@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head> 
 <meta charset="utf-8" />
+ 
 <link href="styles/home.css" rel="stylesheet" type="text/css" /> 
 <script language="javascript" type="text/javascript" src="scripts/jquery-2.1.1.js"></script>
 <script language="javascript" type="text/javascript" src="scripts/index.js"></script>
@@ -12,12 +13,12 @@
       allowed: 140,   
       warning: 25, 
       cssWarning: 'warning',
-      cssExceeded: 'exceeded',
+      cssExceeded: 'exceeded', 
       counterText: '',
       weiboPages:0,
       currentWeiboPage:1,
       currentWeiboSize:6,
-      friendPages:0,
+      friendPages:0, 
     }; 
 
   $(document).ready(function() {
@@ -32,9 +33,11 @@
       if(response._id == getWindowParam("_id")){
         $('#province_city').text(response.provinceName+' '+response.cityName);
         $('#user_name').text(response.nick_name);
+ 
         $('.cont_ontleft img').attr({
           src:response.img 
         });
+ 
       }
     })
     .fail(function() {
@@ -145,8 +148,10 @@
         .done(function(response) {
           if(response.code == 1 ){
             alert("保存成功！");
+ 
             $('#weiboTextArea').text('');
             //将数字变为初值140
+ 
             console.log(response.data);
           }
           console.log("success");
@@ -162,6 +167,7 @@
      });
   //-----------------------------------------------------------------------------
   //-------------------------------加载微博列表---------------------------------------------
+ 
     $.ajax({
       url: '/crud/weibo/page',
       type: 'post',
@@ -213,6 +219,31 @@
       console.log("complete");
     });
   });
+ 
+
+  $.ajax({
+    url: '/crud/weibo/page',
+    type: 'post',
+    dataType: 'json',
+    data: {param1: 'value1'},
+  })
+  .done(function(response) {
+    if(response.code == 1 && response.rows > 0){
+      var weibos = response.data;
+      $("#weibos").loadTemplate("#template", weibos);
+    }
+    console.log("success");
+  })
+  .fail(function() {
+    console.log("error");
+  })
+  .always(function() {
+    console.log("complete");
+  });
+  
+ 
+  //-------------------------------------------------------------------------------
+ 
   //-------------------------------------------------------------------------------
   });
 
@@ -412,9 +443,16 @@
                          <li>同事</li>
                       
                      </ul>
+ 
                   </div> 
             <div id = 'weibos'></div>
             <div class="moreFoot" id="moreList"><a href="javascript:void(0)" ><em class="ico_load"></em>更 多<em></em></a></div>
+ 
+           </div>
+                 
+         
+        
+ 
         </div>
     
     </div>

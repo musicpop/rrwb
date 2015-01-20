@@ -17,12 +17,13 @@ function scrolls(obj){
    }
    if(obj.scrollLeft>=obj.firstChild.offsetWidth)obj.scrollLeft=0;
 }
-
+ 
 $(document).ready(function() {
     $( "#login_btn" ).click(function(event) {
     var login_name=document.getElementById("login_name");
     var password=document.getElementById("password");
     login_name.value=login_name.value.replace(/\s{1,}/g,"");
+ 
     if (login_name.value==""){
         alert("请输入账户！");
         login_name.focus();
