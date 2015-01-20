@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
 <meta charset="utf-8" />
 <title>畅享微博</title>
 <link rel="stylesheet" type="text/css" href="styles/index.css" />
 <script language="javascript" type="text/javascript" src="scripts/index.js"></script>
-<script src="scripts/jquery-2.1.1.js"></script>
+<script language="javascript" type="text/javascript" src="scripts/jquery-2.1.1.js"></script>
 <script language="javascript" type="text/javascript" src="scripts/move.js"></script>
 <script type="text/javascript">
  
@@ -17,25 +17,15 @@ function scrolls(obj){
    }
    if(obj.scrollLeft>=obj.firstChild.offsetWidth)obj.scrollLeft=0;
 }
-window.onload=function(){
 
-    var myMar=setInterval("scrolls(document.getElementById('gundong'))",20);
-document.getElementById('gundong').onmousemove=function(){ clearInterval(myMar) };
-document.getElementById('gundong').onmouseout=function(){ myMar=setInterval("scrolls(document.getElementById('gundong'))",20) };
-//End:公告消息滚动
-
-        }
 $(document).ready(function() {
-    $( "#login_a" ).click(function(event) {
-            /* Act on the event */
-            //alert("click a");
-            
-            var usrname=document.getElementById("usrname");
+    $( "#login_btn" ).click(function(event) {
+    var login_name=document.getElementById("login_name");
     var password=document.getElementById("password");
-    usrname.value=usrname.value.replace(/\s{1,}/g,"");
-    if (usrname.value=="请输入邮箱/会员账号/手机号"){
+    login_name.value=login_name.value.replace(/\s{1,}/g,"");
+    if (login_name.value==""){
         alert("请输入账户！");
-        usrname.focus();
+        login_name.focus();
         return;
     }
     if (password.value==""){
@@ -47,11 +37,11 @@ $(document).ready(function() {
         url: '/crud/user/login',
         type: 'POST',
         dataType: 'json',
-        data: {user_email: usrname.value,pwd:password.value},
+        data: {login_name: login_name.value,pwd:password.value},
     })
     .done(function(response) {
         if(response.rows == 1 ){
-            window.open('/home.html?_id='+response.data[0]._id);
+            window.open('/home.html?_id='+response.data[0]._id,"_self");
  
         }else{
             event.preventDefault();
@@ -73,10 +63,9 @@ $(document).ready(function() {
 </head>
 
 <body>
-	<!--Begin:头部开始-->
-    <div id="global_header">
-	<header>
-    	 <div class="header">
+	<!--Begin:头部开始--> 
+	<header id="global_header">
+             <div class="header">
               <div class="header_logo"><img src="images/logo_update_02.png" width="190" height="34" />    </div>
               <nav class="header_Llist">
                     <ul>
@@ -103,6 +92,7 @@ $(document).ready(function() {
                     </ul>
               </nav>
         </div>
+      
     </header>
 </div>
     <!--End:头部结束-->
@@ -137,13 +127,13 @@ $(document).ready(function() {
         	<div id="kaitong"><a href="regist.html" target="_blank"><img src="images/kaitong.jpg" alt="开通微博" border="0px" /></a></div>
             <div id="loginbox">
 		    <form id="loginform" name="loginform"  action="" method="post">
-            	<input id="usrname" class="inputbox" name="usrname" type="text" value="请输入邮箱/手机号"  onclick="this.focus();OnEnter(this)"
+            	<input id="login_name" class="inputbox" name="login_name" type="text" placeholder="请输入邮箱/手机号"  onclick="this.focus();OnEnter(this)"
  onmouseout="this.blur();OnExit(this);"/>
                 <input id="password" class="inputbox" name="password" type="password" value="" onclick="this.focus();OnEnter(this)"
  onmouseout="this.blur();OnExit(this);" />
   				<div id="auto"><input name="checkbox" type="checkbox" />下次自动登录</div>
                     <div id="forgetpwd"><a href="password.html" target="_blank">忘记密码？</a></div>
-                    <div id="denglu"><a id="login_a" href="home.html"><img src="images/login_button.jpg" border="0px"/></a></div>
+                    <div id="denglu"><input type="button" id = "login_btn" name="login_btn" value="保存"/> </div>
             </form>
             </div>
             <div id="fenge"></div>
@@ -164,23 +154,24 @@ $(document).ready(function() {
     <div id="content">
         <div class="title_style"><img src="images/title1.png" /></div>
         <div class="title_style"><img src="images/title2.png" /></div>
+        <div>
         <div id="saying">
         	<div id="sayframe">
-                <div id="weibo1" class="weibo"><a href="#"><img src="images/daren01.jpg" /></a>
+                <article id="weibo1" class="weibo"><a href="#"><img src="images/daren01.jpg" /></a>
                     <p>#言者无醉#  ？</p>
-                </div>
-                <div id="weibo2" class="weibo"><a href="#"><img src="images/daren05.jpg" /></a>
+                </article>
+                <article id="weibo2" class="weibo"><a href="#"><img src="images/daren05.jpg" /></a>
                   <p>#木有话说#  </p>
-           	  </div>
-                <div id="weibo3" class="weibo"><a href="#"><img src="images/daren04.jpg" /></a>
+           	    </article>
+                <article id="weibo3" class="weibo"><a href="#"><img src="images/daren04.jpg" /></a>
                   <p>奇迹来自超越自我。超越来自“非理性地一跃”，那是跃向更深更真的理性，便可见识奇迹。 </p>
-              	</div>
-                <div id="weibo4" class="weibo"><a href="#"><img src="images/daren02.jpg" /></a>
+              	</article>
+                <article id="weibo4" class="weibo"><a href="#"><img src="images/daren02.jpg" /></a>
                   <p>反转基因人士最爱传的一个谣言是“欧洲禁止转基因”。实际上欧洲批准、种植、销售多种转基因作物。欧洲对转基因作物的管理比美国严格，是由于贸易壁垒以及崇尚“自然”的哲学。</p>
-              	</div>
-                <div id="weibo5" class="weibo"><a href="#"><img src="images/daren07.jpg" border="0px" /></a>
+              	</article>
+                <article id="weibo5" class="weibo"><a href="#"><img src="images/daren07.jpg" border="0px" /></a>
                   <p>http://126.fm/49tvSL #淘电影#《痞子英雄之全面开战》台湾电影终于也开始拍动作大片了，各种追逐，枪战，爆破，连直升机和飞机惊魂都用上了，只是处处都差点火候。完成度还不错，加油吧。</p>
-              	</div>
+              	</article>
           </div>
         </div>
         <div id="fav_people">
@@ -198,6 +189,7 @@ $(document).ready(function() {
                 <li><a href="#"><img src="images/daren05.jpg" border="0px" />赵桂雄</a></li>
                 <li><a href="#"><img src="images/daren02.jpg" border="0px" />万明东</a></li>
             </ul>
+        </div>
         </div>
         <div class="title_style" style="width:270px; margin-top:10px"><img src="images/title3.png" /></div>
         <div class="title_style" style="width:100px; margin-top:10px;"><img src="images/title4.png" /></div>

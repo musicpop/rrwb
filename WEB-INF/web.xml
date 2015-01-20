@@ -2,6 +2,15 @@
 <web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
+	<servlet>
+    <!-- Override init parameter to avoid nasty -->
+    <!-- file locking issue on windows.         -->
+    <servlet-name>default</servlet-name>
+        <init-param>
+            <param-name>useFileMappedBuffer</param-name>
+            <param-value>false</param-value>
+        </init-param>
+	</servlet>
 
     <context-param>
         <param-name>logbackConfigLocation</param-name>
@@ -52,7 +61,7 @@
         <filter-class>com.example.web.LoginFilter</filter-class>
         <init-param>  
 			<param-name>excludedPages</param-name>  
-			<param-value>/regist.html,/index.html,/changeinfo.html</param-value>  
+			<param-value>/regist.html,/index.html,/changeinfo.html,/jquery.html</param-value>  
 		</init-param>  
     </filter>
     

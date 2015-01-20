@@ -20,6 +20,7 @@ body{
 	height:35px;
 	margin:0px;
 	padding:0px;
+	z-index:10;
 }
 /************************顶部导航栏样式********************************/
 .header{
@@ -124,11 +125,10 @@ body{
 /******************************网页的内容总样式********************/
 #content{
 	//border:#000 thin 2px;
-	width:850px;
-	height:1400px;
+	width:850px; 
 	margin:0px auto;
 	padding:45px 0px 0px 0px;
-	background:#D2EAEE no-repeat;
+	//background:#D2EAEE repeat;
 
 }
 /****************************左边的内容样式****************/
@@ -151,8 +151,8 @@ body{
 
 .cont_ontleft{
 	width:100px;
-	height:110px;
-	margin:20px 0px 0px 5px;
+	height:100px;
+	margin:30px 0px 0px 5px;
 	padding:0px;
 	//background:#6C9;
 	float:left;
@@ -316,8 +316,8 @@ color:#FF0000;
 /*****************************************右部的内容样式***********************/
 #cont_Right{
 	background:#FFF;
-	width:605px;
-	height:1400px;
+	width:605px; 
+	height:auto;min-height:500px;
 	margin:0px auto;
 	padding:0px;
 	display:block;
@@ -328,7 +328,9 @@ color:#FF0000;
 	margin:0px auto;
 	padding:0px;
 	width:550px;
-	height:1400px;
+}
+#weibos{
+	height:auto;
 }
 #share{
 	//background-color:#CCC;
@@ -340,8 +342,7 @@ color:#FF0000;
 	}
 #word{
 	margin:15px 0px 0px 20px;
-	padding:0px;
-	color:#F03;
+	padding:0px; 
 	}
 #box{
 	//background-color:#063;
@@ -362,26 +363,32 @@ color:#FF0000;
 	padding:8px 0px 0px 4px;
 	font:Tahoma, Geneva, sans-serif normal 12px;
 }
-#tips{
-	float:left;
+.aviableCount{
+	float: right;
+}
+.warning{
+	color: red;
+}
+.exceeded{
+	color: yellow；
+}
+#tips{ 
 	margin:0px;
-	width:450px;
+	width:550px;
 	height:35px;
 	}
 #look,#picture,#vedio,#music,#topic,#vote{
 	float:left;
 	color: #7AA5B9;
-	margin:0px 2px 0px 8px;
-	width:60px;
-	height:15px;
+	margin:0px 2px 0px 8px;  
 	font: 12px/1.125 Arial,Helvetica,sans-serif;
-	line-height:12px;
+	line-height:20px; 
 	}
 	#look{
 		margin-left:0px;
 	}
 .look1{
-	margin:3px 16px 0px 0px;
+	margin:0px 16px 0px 0px;
 	padding:0px;
 	display:block;
 	float:right;
@@ -453,7 +460,7 @@ color:#FF0000;
 /************************************动态内容样式***************************************/
 .cont_rtdown{
 	width:550px;
-	height:1100px;
+	height:auto;
 	//background:#000;
 	margin:0px;
 	padding:0px;
@@ -540,26 +547,61 @@ display:block;
 }
 .cont_down41{
 	width:550px;
-	height:220px;
+	height:auto;
 	margin:30px 0px 0px 0px;
 	padding:0px;
 	//background:#000;
-	
+	float:left;
 }
 .cont_down4_a{
 	
 	width:50px;
-	height:213px;
+	height:50px;
 	margin:0px 0px 0px 0px;
 	padding:8px 0px 0px 0px;
 	float:left;
+}
+.cont_down4_a img{
+	
+	width:50px;
+	height:50px; 
+}
+ 
+
+ .photoBox{width:100px;
+	height:100px;background:#fff;padding:2px;border:1px solid #E5E5E5;display:inline-block;margin:10px 20px 0 0;position:relative;}
+ .photoBox img{width:100px;
+	height:100px;}
+ .loadingBox{background:#fff;*filter:alpha(opacity=30);text-align:center;margin:-8px 0 0 -8px;display:inline-block;}
+ .loading{background:url(../images/loading_16.gif) no-repeat 0 0;width:16px;height:16px;display:inline-block;}
+ 
+ .photoArea{width:400px;
+	height:400px;background:#F7F7F7;border:1px solid #EBEBEB;padding:10px;text-align:center;zoom:1;}
+#moreList{
+	clear:both;
+	float: left;
+	width:550px;
+	height:35px;
+	background:#056D94;
+	margin:0px 0px 9px 0px;
+}
+#moreList a{
+	display: block;
+height: 26px;
+padding-top: 9px;
+line-height: 16px;
+text-align: center;
+border: 1px solid #D4D4D4;
+border-radius: 3px;
+font-size: 14px;
+font-weight: bold;
 }
 .picture1{
 	border:2px solid #CCCCCC;
 }
 .cont_down4_b{
      width:490px;
-	 height:220px;
+	 height:auto;
 	 float:right;
 	 margin:0px;
 	 padding:0px 0px 0px 4px;
@@ -616,3 +658,13 @@ display:block;
     text-decoration:none; 
 	}
 /*End:底部信息*/
+/*** styling the input type=file ***/
+.fileWrapper {float:left; width:44px; height:17px;position:relative;
+overflow:hidden;}
+.fileWrapper input.fileInput {height:17px;position:absolute;
+top:0;right:0;opacity:0;filter:alpha(opacity=99);cursor:pointer;}
+a.fileButton {display:block;float:left;padding:2px 4px;line-height:17px;
+width:44px;height:17px;text-align:center;font-size:12px;cursor:pointer;
+background:#07134A;color:#ffffff;}
+.fileWrapper:hover a.fileButton {background-color:#2F3A69;}
+

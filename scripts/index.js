@@ -7,7 +7,7 @@ function login(){
 	var usrname=document.getElementById("usrname");
 	var password=document.getElementById("password");
 	usrname.value=usrname.value.replace(/\s{1,}/g,"");
-	if (usrname.value=="请输入邮箱/会员账号/手机号"){
+	if (usrname.value==""){
 		alert("请输入账户！");
 		usrname.focus();
 		return;
@@ -40,16 +40,7 @@ function login(){
 	
 }
 
-//输入时的动作
-function OnEnter(field){
-	field.focus();
-	if(field.value == field.defaultValue){
-		field.value = "";
-	} 
-}
-function OnExit(field){
-	if(field.value == ""){
-		field.value = field.defaultValue;
-	}
-	field.focus();
+function getWindowParam(name){
+   if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+      return decodeURIComponent(name[1]);
 }

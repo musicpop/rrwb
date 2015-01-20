@@ -187,7 +187,7 @@ body
 /*Begin:注册登录模块*/
 #usrlogin{
 	position:absolute;
-	z-index:10;
+	z-index:3;
 	width:294px;
 	height:330px;
 	background:url(../images/loginbox.png) top left no-repeat;
@@ -289,18 +289,16 @@ body
 	padding:0px;
 	padding:0px;
 	height:430px;
-	width:478px;
+	width:470px;
 	border:1px #D8D8D8 solid;
 }
 #sayframe{
 	width:471px;
 	padding:0px;
-	margin-left:20px;
 	overflow:hidden;
 	font-size:14px;
-	position:absolute;
-	top:360px;
-	left:130px;
+	position:relative;
+	left: -20px;
 	height:418px;
 }
 
@@ -363,6 +361,7 @@ body
 	height:150px;
 	margin:0px;
 	padding:0px;
+	clear: all;
 }
 #fav_people li{
 	margin:0px 45px 0px -20px;
@@ -434,5 +433,5 @@ body
 	float:left;
 	list-style-type:none;
 }
-
+ 
 /*End:底部信息*/

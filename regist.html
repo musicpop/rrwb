@@ -5,30 +5,32 @@
      <title>微博账号注册</title>
      <link href="styles/regist.css" type="text/css" rel="stylesheet" />
      <script language="javascript" type="text/javascript" src="scripts/yanzheng.js"></script>
-     <script src="/scripts/jquery-2.1.1.js"></script>
-     <script src="/scripts/jquery.jsonp-2.4.0.js"></script>
+     <script src="/scripts/jquery-2.1.1.js"></script> 
      <script type="text/javascript">
         $(document).ready(function() { 
-          $("#user_name").blur(function(event) {
-                var user_name = $("#user_name").val();
-
-                if(!(check_mobile(user_name) && check_email(user_name))){
-                  $("#user_name").val('');
+          $("#login_name").blur(function(event) {
+                var login_name = $("#login_name").val();
+                var login_name_checkOk = false;
+                if(check_mobile(login_name) || check_email(login_name)){
+                  login_name_checkOk = true;
+                }
+                if(!login_name_checkOk){
+                  $("#login_name").val('');
                   alert("格式不正确");
                   return;
                 }
                 
                 {
                   $.ajax({
-                    url: 'http://localhost:8080/crud/user/findUserByName',
+                    url: '/crud/user/findUserByName',
                     type: 'POST',
-                    data: {'user_email': user_name},
+                    data: {'login_name': login_name},
                     dataType:'json'
                   })
                   .done(function(response) {
                     if(response.code == "1"){
                         if(response.data.length>0){
-                             $("#user_name").val('');
+                             $("#login_name").val('');
                              alert("已被占用！");
                         }
                     }
@@ -104,16 +106,16 @@
         });
         
         function regist(){
-            var user_name = $("#user_name").val();
+            var login_name = $("#login_name").val();
             var password = $("#password").val();
             var re_password = $("#re_password").val();
             var nickname = $("#nickname").val();
             var gender = $("input[type='radio']:checked").val();
-            if(user_name.length>0&&password.length>0&&re_password.length>0&&nickname.length>0&&gender.length>0){
+            if(login_name.length>0&&password.length>0&&re_password.length>0&&nickname.length>0&&gender.length>0){
               $.ajax({
                 url: 'http://localhost:8080/crud/user/add',
                 type: 'POST',
-                data: {"user_email": user_name,"pwd":re_password,"gender":gender,"nick_name":nickname},
+                data: {"login_name": login_name,"pwd":re_password,"gender":gender,"nick_name":nickname},
                 dataType:'json'
               })
               .done(function(response) {
@@ -183,7 +185,7 @@
             <div id="line1"></div>
             </div>
             <div id="i1" class="i">电子邮箱/手机号码 </div>
-            <div class="t"><input id="user_name" type="text" class="textin"/><font color="red"> * </font>
+            <div class="t"><input id="login_name" type="text" class="textin"/><font color="red"> * </font>
               <label id = "lab_myname"></label></div><br />
             <div id="i2" class="i">密码</div>
             <div class="t"><input id="password" type="password" class="textin" /><font color="red"> * </font>
@@ -211,7 +213,7 @@
          <br /><br />&nbsp;<div id="otherthing">已有微博账号？可以直接：</div><br /><br />
          <div id="button"><a href="index.html"><img src="images/otherbutton.gif" border="0px"/></a></div><br /><br />
          <hr  id="line2"color="#CCCCCC" border="dotted"/>
-         <div id="other2"><a href="" class="a"><font face="方正舒体">忘记了密码？</font></a></div>
+         <div id="other2"><a href="" >忘记了密码？   </a></div>
          <div id="other3">
          找到98位朋友<br /><br />
          拥有287名粉丝<br /><br />
