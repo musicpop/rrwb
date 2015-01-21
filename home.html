@@ -141,9 +141,10 @@
           type: 'post',
           dataType: 'json',
           data: {user_id:getWindowParam("_id"),
-                 user_nickName:$('#nick_name').val(), 
+                 user_nickName:$('#nick_name').text(), 
                 content:$('#weiboTextArea').val(),                 
-                img:$("#uploaded_image").val()},
+                img:$("#uploaded_image").val(),
+				user_head_img:$('.cont_ontleft img').attr('src')},
         })
         .done(function(response) {
           if(response.code == 1 ){
@@ -169,7 +170,7 @@
   //-------------------------------加载微博列表---------------------------------------------
  
     $.ajax({
-      url: '/crud/weibo/page',
+      url: '/crud/weibo/followed_weibos',
       type: 'post',
       dataType: 'json',
       data: {user_id: getWindowParam("_id"),page:1,size:defaults.currentWeiboSize},
@@ -204,12 +205,11 @@
         //添加到列表后面
         $("#weibos").loadTemplate("#template", weibos,{append:true});
         //如果行数小于defaults.currentWeiboSize  则全部加载完 更多按钮消失
-        if(response.rows < defaults.currentWeiboSize){
-        $('#moreList').fadeOut();
+        if(weibos.length < defaults.currentWeiboSize){
+        	$('#moreList').fadeOut();
         }
-      }else if(response.code == 1 && response.rows === 0){
-        $('#moreList').fadeOut();
-      }
+		defaults.currentWeiboPage++;
+      } 
       console.log("success");
     })
     .fail(function() {
@@ -221,25 +221,6 @@
   });
  
 
-  $.ajax({
-    url: '/crud/weibo/page',
-    type: 'post',
-    dataType: 'json',
-    data: {param1: 'value1'},
-  })
-  .done(function(response) {
-    if(response.code == 1 && response.rows > 0){
-      var weibos = response.data;
-      $("#weibos").loadTemplate("#template", weibos);
-    }
-    console.log("success");
-  })
-  .fail(function() {
-    console.log("error");
-  })
-  .always(function() {
-    console.log("complete");
-  });
   
  
   //-------------------------------------------------------------------------------
@@ -482,13 +463,11 @@
 <script type="text/html" id="template">
  
     <div class="cont_down41">
-              <div class="cont_down4_a"><img  data-src="img" class="picture1" /></div>
+              <div class="cont_down4_a"><img  data-src="user_head_img" class="picture1" /></div>
               <div class="cont_down4_b"><div class="fo" data-content="user_nickName"></div>
               <div data-content="content"></div>
               <span class="photoBox">
-                <div class="loadingBox">
-                  <span class="loading"></span>
-                </div>
+               
                 <img data-src="img" class="zoom" onclick="zoom_image($(this).parent());"/>
               </span> 
               

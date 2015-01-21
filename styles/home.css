@@ -559,6 +559,7 @@ display:block;
 	margin:0px 0px 0px 0px;
 	padding:8px 0px 0px 0px;
 	float:left;
+	border:1px solid #E5E5E5;
 }
 .cont_down4_a img{ 
 	width:50px;
@@ -610,8 +611,7 @@ font-weight: bold;
 }
 .photoArea img{
 	width:400px;
-	height:400px;
->>>>>>> a96f88215d37b614e1ee97d6f6ee5b0768261c9f
+	height:400px; 
 }
 .picture1{
 	border:2px solid #CCCCCC;
