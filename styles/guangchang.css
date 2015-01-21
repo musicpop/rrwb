@@ -131,10 +131,10 @@ body{
    padding:113px 0px 0px 150px;  
 }
 /* 主体样式 */
-#main{
-	color:#F00;
+#main{ 
     font-weight:bold;
 	margin:0px 0px 0px 0px;
+ 
 }
 #more{
 	margin:0px 0px 0px 3px;

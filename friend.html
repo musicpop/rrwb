@@ -4,6 +4,80 @@
 <meta charset="utf-8" />
 <link href="styles/friend.css" rel="stylesheet" type="text/css" />
 <title>好友微博 - 主页</title>
+<script language="javascript" type="text/javascript" src="scripts/jquery-2.1.1.js"></script>
+<script language="javascript" type="text/javascript" src="scripts/index.js"></script>
+<script language="javascript" type="text/javascript" src="scripts/jquery.loadTemplate-1.4.4.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+ $.ajax({
+      url: '/crud/user/show',
+      type: 'POST',
+      dataType: 'json',
+      data: {_id: getWindowParam("fans_id")},
+    })
+    .done(function(response) {
+      if(response._id == getWindowParam("fans_id")){
+        $('#province_city').text(response.provinceName+' '+response.cityName);
+        $('#user_name').text(response.nick_name);
+ 
+        $('.cont_ontleft img').attr({
+          src:response.img 
+        });
+ 
+      }
+    })
+    .fail(function() {
+      console.log("error");
+    })
+    .always(function() {
+      console.log("complete");
+    });
+    //---------------------------是否已关注---------------------
+    $.ajax({
+      url: '/crud/fans/find',
+      type: 'POST',
+      dataType: 'json',
+      data: {fans_id: getWindowParam("fans_id"),followed_id:getWindowParam("followed_id")}
+    })
+    .done(function(response) {
+      if(response.fans_id == getWindowParam("fans_id") && response.followed_id == getWindowParam("followed_id")){
+        $('#province_city').text(response.provinceName+' '+response.cityName);
+        $("#follow_a").text('已关注');
+      }else{
+        
+      }
+    })
+    .fail(function() {
+      console.log("error");
+    })
+    .always(function() {
+      console.log("complete");
+    });
+    //-----------------------------------------------------------
+    $("#follow_a").click(function(event) {
+            event.preventDefault();
+            $.ajax({
+              url: '/crud/fans/add',
+              type: 'POST',
+              dataType: 'json',
+              data: {fans_id: getWindowParam("fans_id"),followed_id:getWindowParam("followed_id")},
+            })
+            .done(function(response) {
+                if(response.code == "1"){
+                  $("#follow_a").attr("disabled","disabled");
+                  alert("关注成功！");
+                  console.log("success");
+                }
+            })
+            .fail(function() {
+              console.log("error");
+            })
+            .always(function() {
+              console.log("complete");
+            });
+        });
+	});
+</script>
 </head>
 
 <body>
@@ -22,7 +96,7 @@
               </div>
               <div class="header_M">
               <div class="header_Mi">
-                    <form action="" method="post" name=""><input type="text" value="请输入搜索内容" class="bb" />
+                    <form action="" method="post" name=""><input type="text" placeholder="请输入搜索内容" class="bb" />
                      </form>
                     </div>
                      <div class="header_Ms"><a href="#"><img src="images/sou_08.gif"  /></a></div>
@@ -44,6 +118,17 @@
 <!--内容部分开始-->
 <div id="content">
     <div class="cont_Left">
+       <div class="cont_Leftone">
+                <div class="cont_ontleft"><img src=""  /></div>
+                       <div class="cont_oneright">
+                                       <span id="user_name" class="cont_oneright_name"></span><br />
+                                       <span id="province_city" class="cont_oneright_adrs"> </span><br />
+
+                                       <span class="cont_oneright_se"><a id = "follow_a" href="index.html" class="wficon"><em class="W_ficon">+</em>关注</a>&nbsp;&nbsp;</span>
+                         
+        </div>
+                        <div class="cont_onebottom">http:www.baidu.com/logo?i=4</div>
+      </div>
 	  <div id="fl1">
 <div id="fl11"><img src="images/mark_icon.png" /> 他的标签</div>
                 	<br />
@@ -133,34 +218,8 @@
     </div>
     <div id="cont_Right">
          <div class="cont_Rightb">
-            <div id="fr1">
-            	<div id="fr11">
-                	<div id="fr111" class="imgstyle"><img src="images/zhang.jpg"/></div>
-                </div>
-                <div id="fr12"><span>张小娴</span><br /><br />失望，有时候，也是一种幸福<br />
-                  因为有所期待，才会失望<br />	
-                  遗憾，也是一种幸福<br />
-                  因为还有令你遗憾的事情<br />
-                  她追寻爱情，然后发现<br />
-                  爱，从来就是一件千回百转的事<br /></div>
-            </div>
-            <div class="cont_Rightwo">
             
-                <span class="cont_rtd">
-                    她收听
-                    <a href="#">[换一换]
-                    </a>&nbsp;&nbsp;<a href="#">[全部]</a>
-                </span>
-                <span class="cont_rtp imgstyle"><img src="images/image_010.jpeg" class="cont_rtp1" />
-                <span class="cont_rtp2">李培<br />文艺青年<br />加关注</span>
-                </span>
-                <span class="cont_rtp imgstyle"><img src="images/image_011.jpeg" class="cont_rtp1" />
-                <span class="cont_rtp2">清风<br />无声留香去<br /></span>
-                </span>
-                <span class="cont_rtp imgstyle"><img src="images/image_012.jpeg" class="cont_rtp1" />
-                <span class="cont_rtp2">李培<br />加为博友</span>
-                </span>
-            </div>
+             
       <div class="cont_rtdown">
                      <div class="cont_down1">
                          <ul>

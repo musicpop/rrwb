@@ -139,7 +139,66 @@ body{
 	padding:0px;
 
 }
+/*****************左边名片样式设计**********************************/
+.cont_Leftone{
+	//background:#FF0 no-repeat;
+	width:240px;
+	height:180px;
+	margin:0px;
+	padding:0px;
+}
 
+.cont_ontleft{
+	width:100px;
+	height:100px;
+	margin:30px 0px 0px 5px;
+	padding:0px;
+	//background:#6C9;
+	float:left;
+	border:1px solid #CCCCCC;
+}
+.cont_oneright{
+	width:130px;
+	height:110px;
+	margin:20px 0px 0px 0px;
+	padding:0px;
+	//background:#090;
+	float:right;
+}
+.cont_oneright_name{
+color:#FF0000;
+font-size:16px;
+display:block;
+margin:12px 0px 0px 0px;
+padding:0px;
+color: #0073B2;
+font-weight: bold;
+}
+.cont_oneright_adrs{
+color:#1e50a2;
+display:block;
+line-height:15px;
+font: 12px/1.125 Arial,Helvetica,sans-serif;
+
+
+}
+.cont_oneright_se{
+display:block;
+color:#1e50a2;
+font-size:14px;
+
+}
+
+.cont_onebottom{
+text-align:center;
+padding:0px;
+width:240px;
+height:30px;
+position:relative;
+top:10px;
+margin:0px;
+color:#990033;
+}
 /*************************介绍开始*****************************/
 #fl1{
 	width:240px;

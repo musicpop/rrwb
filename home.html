@@ -32,7 +32,7 @@
     .done(function(response) {
       if(response._id == getWindowParam("_id")){
         $('#province_city').text(response.provinceName+' '+response.cityName);
-        $('#user_name').text(response.nick_name);
+        $('#nick_name').text(response.nick_name);
  
         $('.cont_ontleft img').attr({
           src:response.img 
@@ -314,7 +314,7 @@
       <div class="cont_Leftone">
                 <div class="cont_ontleft"><img src=""  /></div>
                        <div class="cont_oneright">
-                                       <span id="user_name" class="cont_oneright_name"></span><br />
+                                       <span id="nick_name" class="cont_oneright_name"></span><br />
                                        <span id="province_city" class="cont_oneright_adrs">河北&nbsp;邯郸</span><br />
 
                                        <span class="cont_oneright_se"><a href="index.html" class="wficon"><em class="W_ficon">+</em>关注</a>&nbsp;|&nbsp;粉丝&nbsp;</span>

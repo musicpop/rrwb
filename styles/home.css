@@ -580,7 +580,8 @@ display:block;
 	float: left;
 	width:550px;
 	height:35px;
-	background:#056D94;
+    background:#EAEDEE;
+	color:#1e50a2;
 	margin:0px 0px 9px 0px;
 }
 #moreList a{
