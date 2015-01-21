@@ -19,7 +19,15 @@
       currentWeiboPage:1,
       currentWeiboSize:6,
       friendPages:0, 
+	  last_refresh_time:(new Date()).getTime(),
+	  last_more_time:(new Date()).getTime()
     }; 
+	$.addTemplateFormatter({
+        DateTimeFormatter : function(value, template) {
+			var cTime = new Date(value)
+			return cTime.getFullYear()+"-"+(cTime.getMonth()+1)+"-"+cTime.getDate()+" "+cTime.getHours()+":"+cTime.getMinutes()+":"+cTime.getSeconds(); 
+        }
+});
 
   $(document).ready(function() {
      
@@ -152,7 +160,7 @@
  
             $('#weiboTextArea').text('');
             //将数字变为初值140
- 
+ 			load_Latest_Followed_Weibos();
             console.log(response.data);
           }
           console.log("success");
@@ -168,56 +176,13 @@
      });
   //-----------------------------------------------------------------------------
   //-------------------------------加载微博列表---------------------------------------------
- 
-    $.ajax({
-      url: '/crud/weibo/followed_weibos',
-      type: 'post',
-      dataType: 'json',
-      data: {user_id: getWindowParam("_id"),page:1,size:defaults.currentWeiboSize},
-    })
-    .done(function(response) {
-      if(response.code == 1 && response.rows > 0){
-        var weibos = response.data;
-        defaults.weiboPages=response.pages;
-        $("#weibos").loadTemplate("#template", weibos);
-      }
-      console.log("success");
-    })
-    .fail(function() {
-      console.log("error");
-    })
-    .always(function() {
-      console.log("complete");
-    });
+  load_All_Followed_Weibos();
+    
   //-------------微博列表 加载最新微博----
  
   //---------------微博列表 加载较旧微博--------------------------------------------
   $('#moreList a').click(function(event) {
-    $.ajax({
-      url: '/crud/weibo/page',
-      type: 'post',
-      dataType: 'json',
-      data: {user_id: getWindowParam("_id"),page:defaults.currentWeiboPage,size:defaults.currentWeiboSize},
-    })
-    .done(function(response) {
-      if(response.code == 1 && response.rows > 0){
-        var weibos = response.data;
-        //添加到列表后面
-        $("#weibos").loadTemplate("#template", weibos,{append:true});
-        //如果行数小于defaults.currentWeiboSize  则全部加载完 更多按钮消失
-        if(weibos.length < defaults.currentWeiboSize){
-        	$('#moreList').fadeOut();
-        }
-		defaults.currentWeiboPage++;
-      } 
-      console.log("success");
-    })
-    .fail(function() {
-      console.log("error");
-    })
-    .always(function() {
-      console.log("complete");
-    });
+      load_All_Followed_Weibos();
   });
  
 
@@ -227,7 +192,58 @@
  
   //-------------------------------------------------------------------------------
   });
-
+  //加载所有自己及关注者的比当前时间新微博
+  function load_Latest_Followed_Weibos(){
+	  $.ajax({
+      url: '/crud/weibo/latest_weibos',
+      type: 'post',
+      dataType: 'json',
+      data: {user_id: getWindowParam("_id"),page:1,size:100,currentTime:defaults.last_refresh_time},
+    })
+    .done(function(response) {
+      if(response.code == 1 && response.rows > 0){
+        var weibos = response.data;
+        defaults.weiboPages=response.pages;
+        $("#weibos").loadTemplate("#template", weibos,{prepend:true});
+		defaults.last_refresh_time = (new Date()).getTime();
+      }
+      console.log("success");
+    })
+    .fail(function() {
+      console.log("error");
+    })
+    .always(function() {
+      console.log("complete");
+    });
+  }
+  //加载所有自己及关注者的最新微博
+  function load_All_Followed_Weibos(){
+	 $.ajax({
+      url: '/crud/weibo/followed_weibos',
+      type: 'post',
+      dataType: 'json',
+      data: {user_id: getWindowParam("_id"),page:defaults.currentWeiboPage,size:defaults.currentWeiboSize,last_More_Time:defaults.last_more_time},
+    })
+    .done(function(response) {
+      if(response.code == 1 && response.rows > 0){
+        var weibos = response.data;
+        //添加到列表后面
+        $("#weibos").loadTemplate("#template", weibos,{append:true});
+        //如果行数小于defaults.currentWeiboSize  则全部加载完 更多按钮消失
+        if(weibos.length < defaults.currentWeiboSize){
+        	$('#moreList').fadeOut();
+        } 
+		defaults.last_more_time = weibos[weibos.length-1].timestamp;
+      } 
+      console.log("success");
+    })
+    .fail(function() {
+      console.log("error");
+    })
+    .always(function() {
+      console.log("complete");
+    });
+  }
   function zoom_image(obj) {
     if (obj.hasClass('photoBox')) {
         var load = obj.find('.loadingBox');
@@ -466,16 +482,18 @@
               <div class="cont_down4_a"><img  data-src="user_head_img" class="picture1" /></div>
               <div class="cont_down4_b"><div class="fo" data-content="user_nickName"></div>
               <div data-content="content"></div>
-              <span class="photoBox">
+              <div class="photoBox">
                
                 <img data-src="img" class="zoom" onclick="zoom_image($(this).parent());"/>
-              </span> 
+              </div> 
               
               <div class="photoArea" style="display:none;">
                  <img data-src="url" class="minifier" onclick="zoom_image($(this).parent());" />
                  
               </div> 
- 
+			  <div>
+ 			  <time data-content="timestamp" data-format="DateTimeFormatter"></time>
+			  </div>
 </div>
            </div>
 </script>
