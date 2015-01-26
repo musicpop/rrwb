@@ -10,7 +10,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
  $.ajax({
-      url: '/crud/user/show',
+      url: 'http://localhost:8080/rrwb/crud/user/show',
       type: 'POST',
       dataType: 'json',
       data: {_id: getWindowParam("fans_id")},
@@ -34,7 +34,7 @@ $(document).ready(function() {
     });
     //---------------------------是否已关注---------------------
     $.ajax({
-      url: '/crud/fans/find',
+      url: 'http://localhost:8080/rrwb/crud/fans/find',
       type: 'POST',
       dataType: 'json',
       data: {fans_id: getWindowParam("fans_id"),followed_id:getWindowParam("followed_id")}
@@ -57,7 +57,7 @@ $(document).ready(function() {
     $("#follow_a").click(function(event) {
             event.preventDefault();
             $.ajax({
-              url: '/crud/fans/add',
+              url: 'http://localhost:8080/rrwb/crud/fans/add',
               type: 'POST',
               dataType: 'json',
               data: {fans_id: getWindowParam("fans_id"),followed_id:getWindowParam("followed_id")},
@@ -89,9 +89,7 @@ $(document).ready(function() {
                     <ul>
                         <li><a href="index.html">首页</a></li>
                         <li><a href="guangchang.html" target="_blank">广场</a></li>
-                        <li><a href="#">微群</a></li>
-                        <li><a href="#">应用</a></li>
-                        <li><a href="#">游戏</a></li>
+                        <li><a href="game.html" target="_blank">游戏</a></li>
                     </ul>
               </div>
               <div class="header_M">
@@ -102,9 +100,7 @@ $(document).ready(function() {
                      <div class="header_Ms"><a href="#"><img src="images/sou_08.gif"  /></a></div>
               </div>
               <div class="header_Rlist">
-                    <ul>
-                        <li><a href="#">某人</a></li>
-                        <li><a href="#">手机</a></li>
+                    <ul> 
                         <li><a href="#">消息</a></li>
                         <li><a href="changeinfo.html" target="_blank">修改资料</a></li>
                     </ul>

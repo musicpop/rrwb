@@ -13,7 +13,7 @@
 	var template = '<div id="content"><div id="tu2"><a href="/friend.html?fans_id='+getWindowParam("_id")+'&followed_id={_id}">{nick_name}<br /><img src="{img}" border="0"></a></div> ';
   $(document).ready(function() {
 	  $.ajax({
-      url: 'http://localhost:8080/crud/user/findUserLikeNickName',
+      url: 'http://localhost:8080/rrwb/crud/user/findUserLikeNickName',
       type: 'POST',
       dataType: 'json',
       data: {nick_name: getWindowParam("nick_name"),my_id:getWindowParam("_id")}
@@ -47,9 +47,7 @@
                     <ul>
                         <li><a href="#">首页</a></li>
                         <li><a href="guangchang.html" target="_blank">广场</a></li>
-                        <li><a href="#">微群</a></li>
-                        <li><a href="#">应用</a></li>
-                        <li><a href="#">游戏</a></li>
+                        <li><a href="game.html" target="_blank">游戏</a></li>
                     </ul>
               </div>
               <div class="header_M">
@@ -60,9 +58,7 @@
                      <div class="header_Ms"><a href="#"><img src="images/sou_08.gif"  /></a></div>
               </div>
               <div class="header_Rlist">
-                    <ul>
-                        <li><a href="#">某人</a></li>
-                        <li><a href="#">手机</a></li>
+                    <ul> 
                         <li><a href="#">消息</a></li>
                         <li><a href="changeinfo.html" target="_blank">修改资料</a></li>
                     </ul>

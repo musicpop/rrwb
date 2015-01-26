@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head> 
+<head>
 <meta charset="utf-8" />
  
 <link href="styles/home.css" rel="stylesheet" type="text/css" /> 
@@ -19,20 +19,19 @@
       currentWeiboPage:1,
       currentWeiboSize:6,
       friendPages:0, 
-	  last_refresh_time:(new Date()).getTime(),
-	  last_more_time:(new Date()).getTime()
+    last_refresh_time:(new Date()).getTime(),
+    last_more_time:(new Date()).getTime()
     }; 
-	$.addTemplateFormatter({
+  $.addTemplateFormatter({
         DateTimeFormatter : function(value, template) {
-			var cTime = new Date(value)
-			return cTime.getFullYear()+"-"+(cTime.getMonth()+1)+"-"+cTime.getDate()+" "+cTime.getHours()+":"+cTime.getMinutes()+":"+cTime.getSeconds(); 
+      var cTime = new Date(value)
+      return cTime.getFullYear()+"-"+(cTime.getMonth()+1)+"-"+cTime.getDate()+" "+cTime.getHours()+":"+cTime.getMinutes()+":"+cTime.getSeconds(); 
         }
 });
-
   $(document).ready(function() {
      
     $.ajax({
-      url: '/crud/user/show',
+      url: 'http://localhost:8080/rrwb/crud/user/show',
       type: 'POST',
       dataType: 'json',
       data: {_id: getWindowParam("_id")},
@@ -85,7 +84,7 @@
         {
             var formData = new FormData(this);
             $.ajax({
-                url: '/crud/uploadServlet',
+                url: 'http://localhost:8080/rrwb/crud/uploadServlet',
                 type: 'POST',
                 mimeType:"multipart/form-data",
                 data:formData,
@@ -145,22 +144,23 @@
   $("#submitWeiboBtn").click(function(e) {
         e.preventDefault();
         $.ajax({
-          url: '/crud/weibo/add',
+          url: 'http://localhost:8080/rrwb/crud/weibo/add',
           type: 'post',
           dataType: 'json',
           data: {user_id:getWindowParam("_id"),
                  user_nickName:$('#nick_name').text(), 
                 content:$('#weiboTextArea').val(),                 
                 img:$("#uploaded_image").val(),
-				user_head_img:$('.cont_ontleft img').attr('src')},
+        user_head_img:$('.cont_ontleft img').attr('src')},
         })
         .done(function(response) {
           if(response.code == 1 ){
             alert("保存成功！");
- 
-            $('#weiboTextArea').text('');
+            $('#weiboTextArea').val('');
+            $("#uploaded_image").val('');
             //将数字变为初值140
- 			load_Latest_Followed_Weibos();
+            $(".aviableCount span").html('140');
+            load_Latest_Followed_Weibos();
             console.log(response.data);
           }
           console.log("success");
@@ -169,7 +169,6 @@
           console.log("error");
         })
         .always(function() {
-          $("#uploaded_image").val('');
           console.log("complete");
         });
         
@@ -185,7 +184,6 @@
       load_All_Followed_Weibos();
   });
  
-
   
  
   //-------------------------------------------------------------------------------
@@ -194,8 +192,8 @@
   });
   //加载所有自己及关注者的比当前时间新微博
   function load_Latest_Followed_Weibos(){
-	  $.ajax({
-      url: '/crud/weibo/latest_weibos',
+    $.ajax({
+      url: 'http://localhost:8080/rrwb/crud/weibo/latest_weibos',
       type: 'post',
       dataType: 'json',
       data: {user_id: getWindowParam("_id"),page:1,size:100,currentTime:defaults.last_refresh_time},
@@ -205,7 +203,7 @@
         var weibos = response.data;
         defaults.weiboPages=response.pages;
         $("#weibos").loadTemplate("#template", weibos,{prepend:true});
-		defaults.last_refresh_time = (new Date()).getTime();
+    defaults.last_refresh_time = (new Date()).getTime();
       }
       console.log("success");
     })
@@ -218,8 +216,8 @@
   }
   //加载所有自己及关注者的最新微博
   function load_All_Followed_Weibos(){
-	 $.ajax({
-      url: '/crud/weibo/followed_weibos',
+   $.ajax({
+      url: 'http://localhost:8080/rrwb/crud/weibo/followed_weibos',
       type: 'post',
       dataType: 'json',
       data: {user_id: getWindowParam("_id"),page:defaults.currentWeiboPage,size:defaults.currentWeiboSize,last_More_Time:defaults.last_more_time},
@@ -231,9 +229,9 @@
         $("#weibos").loadTemplate("#template", weibos,{append:true});
         //如果行数小于defaults.currentWeiboSize  则全部加载完 更多按钮消失
         if(weibos.length < defaults.currentWeiboSize){
-        	$('#moreList').fadeOut();
+          $('#moreList').fadeOut();
         } 
-		defaults.last_more_time = weibos[weibos.length-1].timestamp;
+    defaults.last_more_time = weibos[weibos.length-1].timestamp;
       } 
       console.log("success");
     })
@@ -333,10 +331,10 @@
                           <div class="cont_threeMd">
                               <ul>
                                   <li class="cont_threemain">
-								  <a href="friend.html">
+                  <a href="friend.html">
                                       <img src="images/image_016.jpeg" class="cont_threeuser" /></a> <div class="cont_threename">
-									 <a href="friend.html" >高鑫</a></div>
-									  </li>
+                   <a href="friend.html" >高鑫</a></div>
+                    </li>
                               
                                   <li class="cont_threemain">
                                       <img src="images/image_004.jpeg" class="cont_threeuser" />
@@ -461,14 +459,14 @@
 
 <footer id="footer">
 
-        	<ul>
-            	<li><a href="#">团队简介</a></li>
+          <ul>
+              <li><a href="#">团队简介</a></li>
                 <li><a href="#">联系方式</a></li>
                 <li><a href="#">网站地图</a></li>
                 <li><a href="#">达人认证</a></li>
                 <li><a href="#">开放平台</a></li>
                 <li><a href="#">信息举报</a></li>
-           	</ul>
+            </ul>
  
         </footer>
         </div>
@@ -491,9 +489,9 @@
                  <img data-src="url" class="minifier" onclick="zoom_image($(this).parent());" />
                  
               </div> 
-			  <div>
- 			  <time data-content="timestamp" data-format="DateTimeFormatter"></time>
-			  </div>
+        <div>
+        <time data-content="timestamp" data-format="DateTimeFormatter"></time>
+        </div>
 </div>
            </div>
 </script>

@@ -22,7 +22,7 @@
                 
                 {
                   $.ajax({
-                    url: '/crud/user/findUserByName',
+                    url: 'http://localhost:8080/rrwb/crud/user/findUserByName',
                     type: 'POST',
                     data: {'login_name': login_name},
                     dataType:'json'
@@ -113,7 +113,7 @@
             var gender = $("input[type='radio']:checked").val();
             if(login_name.length>0&&password.length>0&&re_password.length>0&&nickname.length>0&&gender.length>0){
               $.ajax({
-                url: 'http://localhost:8080/crud/user/add',
+                url: 'http://localhost:8080/rrwb/crud/user/add',
                 type: 'POST',
                 data: {"login_name": login_name,"pwd":re_password,"gender":gender,"nick_name":nickname},
                 dataType:'json'
@@ -147,9 +147,7 @@
                     <ul>
                         <li><a href="#">首页</a></li>
                         <li><a href="guangchang.html" target="_blank">广场</a></li>
-                        <li><a href="#">微群</a></li>
-                        <li><a href="#">应用</a></li>
-                        <li><a href="#">游戏</a></li>
+                        <li><a href="game.html" target="_blank">游戏</a></li>
                     </ul>
               </nav>
               <div class="header_M">
@@ -161,8 +159,6 @@
               </div>
               <nav class="header_Rlist">
                     <ul>
-                        <li><a href="#">某人</a></li>
-                        <li><a href="#">手机</a></li>
                         <li><a href="#">消息</a></li>
                         <li><a href="changeinfo.html" target="_blank">修改资料</a></li>
                     </ul>

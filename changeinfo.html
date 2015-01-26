@@ -6,9 +6,7 @@
 <link rel="stylesheet" type="text/css" href="styles/changeinfo.css"/>
  <link rel="stylesheet" type="text/css" href="styles/imgareaselect-default.css" /> 
  <script language="javascript" type="text/javascript" src="scripts/jquery-2.1.1.js"></script>
-<script type="text/javascript" src="scripts/jquery.imgareaselect.pack.js"></script>
-<script language="javascript" type="text/javascript" src="scripts/warning.js"></script>
-<script language="javascript" type="text/javascript" src="scripts/changeinfo.js"></script>
+<script type="text/javascript" src="scripts/jquery.imgareaselect.pack.js"></script> 
 <script language="javascript" type="text/javascript" src="scripts/index.js"></script>
 <script>
   
@@ -17,7 +15,7 @@ $(document).ready(function() {
    $("select[name=province]").append("<option value='0'>请选择..</option>");
    $("select[name=city]").append("<option value='0'>请选择..</option>");
    $.ajax({
-    url: '/xml/Provinces.xml',
+    url: '/rrwb/xml/Provinces.xml',
     type: 'GET',
     dataType: 'xml',
     data: {param1: 'value1'},
@@ -43,7 +41,7 @@ $(document).ready(function() {
         }else{
           var selectvalue = $(this).val(); //得到选中国家的value
             $.ajax({
-                url:"/xml/Cities.xml",
+                url:"/rrwb/xml/Cities.xml",
                 type:"get",
                 datatype:"xml",
                 success:function(xml){
@@ -60,7 +58,7 @@ $(document).ready(function() {
   //-----------------------------------------------------------------------------
   //--------------------加载数据-------------------------------------------------
   $.ajax({
-      url: '/crud/user/show',
+      url: 'http://localhost:8080/rrwb/crud/user/show',
       type: 'POST',
       dataType: 'json',
       data: {_id: getWindowParam("_id")},
@@ -92,7 +90,7 @@ $(document).ready(function() {
   $("#save").click(function(e) {
         e.preventDefault();
         $.ajax({
-          url: '/crud/user/edit',
+          url: 'http://localhost:8080/rrwb/crud/user/edit',
           type: 'post',
           dataType: 'json',
           data: {_id:$('input[name=_id]').val() ,
@@ -143,7 +141,7 @@ $(document).ready(function() {
         {
             var formData = new FormData(this);
             $.ajax({
-                url: '/crud/uploadServlet',
+                url: 'http://localhost:8080/rrwb/crud/uploadServlet',
                 type: 'POST',
                 mimeType:"multipart/form-data",
                 data:formData,
@@ -254,9 +252,7 @@ function preview(img, selection) {
                     <ul>
                         <li><a href="index.html">首页</a></li>
                         <li><a href="guangchang.html" target="_blank">广场</a></li>
-                        <li><a href="#">微群</a></li>
-                        <li><a href="#">应用</a></li>
-                        <li><a href="#">游戏</a></li>
+                        <li><a href="game.html" target="_blank">游戏</a></li>
                     </ul>
               </div>
               <div class="header_M">
@@ -267,9 +263,7 @@ function preview(img, selection) {
                      <div class="header_Ms"><a href="#"><img src="images/sou_08.gif"  /></a></div>
               </div>
               <div class="header_Rlist">
-                    <ul>
-                        <li><a href="#">某人</a></li>
-                        <li><a href="#">手机</a></li>
+                    <ul> 
                         <li><a href="#">消息</a></li>
                         <li><a href="changeinfo.html" target="_blank">修改资料</a></li>
                     </ul>
