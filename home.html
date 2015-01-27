@@ -30,7 +30,7 @@
         }
 });
   $(document).ready(function() {
-     
+    $('#changeinfo_a').attr('href','changeinfo.html?_id='+getWindowParam("_id"));
     $.ajax({
       url: 'http://localhost:8080/rrwb/crud/user/show',
       type: 'POST',
@@ -190,6 +190,14 @@
   //-------------------------------------------------------------------------------
   load_follows();
   //-------------------------------------------------------------------------------
+  $('#search_a').click(function(event) {
+    if($('#search_text').val() != ''){
+      window.open('/rrwb/guangchang.html?_id='+getWindowParam("_id")+'&nick_name='+$('#search_text').val(),"_blank");
+    }
+    e.preventDefault();
+  });
+ 
+  //--------------------------------------------------------------------------------
   });
   //加载所有自己及关注者的比当前时间新微博
   function load_Latest_Followed_Weibos(){
@@ -305,24 +313,22 @@
                     <ul>
                         <li><a href="#">首页</a></li>
                         <li><a href="guangchang.html" target="_blank">广场</a></li>
-                        <li><a href="#">微群</a></li>
-                        <li><a href="#">应用</a></li>
-                        <li><a href="#">游戏</a></li>
+                        
+                        <li><a href="game.html" target="_blank">游戏</a></li>
                     </ul>
               </div>
               <div class="header_M">
               <div class="header_Mi">
-                    <form action="" method="post" name=""><input type="text" placeholder="请输入搜索内容" class="bb" />
+                    <form  action="" method="post" name=""><input id="search_text" type="text" placeholder="请输入搜索内容" class="bb" />
                      </form>
                     </div>
-                     <div class="header_Ms"><a href="#"><img src="images/sou_08.gif"  /></a></div>
+                     <div class="header_Ms"><a id = "search_a" href="#"><img src="images/sou_08.gif"  /></a></div>
               </div>
               <div class="header_Rlist">
                     <ul>
-                        <li><a href="#">某人</a></li>
-                        <li><a href="#">手机</a></li>
+ 
                         <li><a href="#">消息</a></li>
-                        <li><a href="changeinfo.html" target="_blank">修改资料</a></li>
+                        <li><a id="changeinfo_a" href="changeinfo.html" target="_blank">修改资料</a></li>
                     </ul>
               </div>
         </div>
