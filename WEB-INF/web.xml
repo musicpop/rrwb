@@ -61,7 +61,7 @@
         <filter-class>com.example.web.LoginFilter</filter-class>
         <init-param>  
 			<param-name>excludedPages</param-name>  
-			<param-value>/regist.html,/index.html,/changeinfo.html,/jquery.html</param-value>  
+			<param-value>/regist.html,/index.html,/changeinfo.html,/home.html,/friend.html,/guangchang.html,/game.html</param-value>  
 		</init-param>  
     </filter>
     
