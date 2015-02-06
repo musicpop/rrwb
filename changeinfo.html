@@ -87,6 +87,7 @@ $(document).ready(function() {
     });
   //-----------------------------------------------------------------------------
   //--------------------保存提交-------------------------------------------------
+ 
   $("#save").click(function(e) {
         e.preventDefault();
         $.ajax({
@@ -122,6 +123,7 @@ $(document).ready(function() {
         });
         
      });
+
   //-----------------------------------------------------------------------------
   //--------------------头像上传-------------------------------------------------
     $("#file").change(function(){
@@ -234,49 +236,41 @@ function preview(img, selection) {
 </head>
 
 <body>
-   <!------------------------------------------ begin 固定栏---------------------------------------------------->
- <!--  <div id="guiding">
-            <a href="#">首页</a><a href="#">广场</a><a href="#">应用</a><a href="#">游戏</a><a href="#">微群</a>
-                <span id="search">
-                <input class="input" type="text" maxlength="40" value="搜索微博、找人" name="">
-                <button onclick="shousuo" value="shousuo">搜索</button>
-                </span>
-            <a href="#">动星师</a><a href="#">手机</a><a href="#">找人</a><a href="#">信息</a><a href="#">账号</a>
-    </div>-->
-    <!-----------------------------------------end 固定栏-------------------------------------------------------->
-    <div id="global_header">
-        <!--顶部导航栏开始-->
-        <div class="header">
+   <!--Begin:头部开始--> 
+  <header id="global_header">
+             <div class="header">
               <div class="header_logo"><img src="images/logo_update_02.png" width="190" height="34" />    </div>
-              <div class="header_Llist">
+              <nav class="header_Llist">
                     <ul>
-                        <li><a href="index.html">首页</a></li>
+                        <li><a href="#">首页</a></li>
                         <li><a href="guangchang.html" target="_blank">广场</a></li>
                         <li><a href="game.html" target="_blank">游戏</a></li>
                     </ul>
-              </div>
+              </nav>
               <div class="header_M">
               <div class="header_Mi">
-                    <form action="" method="post" name=""><input type="search" placeholder="请输入搜索内容" class="bb" />
+                    <form action="" method="post" name=""><input type="text"  placeholder="请输入搜索内容" class="bb" />
                      </form>
                     </div>
                      <div class="header_Ms"><a href="#"><img src="images/sou_08.gif"  /></a></div>
               </div>
-              <div class="header_Rlist">
+              <nav class="header_Rlist">
                     <ul> 
                         <li><a href="#">消息</a></li>
                         <li><a href="changeinfo.html" target="_blank">修改资料</a></li>
                     </ul>
-              </div>
+              </nav>
         </div>
-      <!--顶部导航栏结束-->
-</div> 
+      
+    </header>
+</div>
+    <!--End:头部结束-->
  
     <div id="total">
       <div id="leftpart" align="center">
 <div id="lefttop">
                  <div id="top">账号设置</div>
-                 <div id="top1"><img src="images/img1.gif" />个人资料&nbsp;预览</div>
+                 <div id="top1"><img src="images/img1.gif" />个人资料预览</div>
                  <div id="top2"><font color="#000000">基本信息</font></div>
  
              </div>
@@ -290,7 +284,7 @@ function preview(img, selection) {
     <!---------------------- begin 右部-------------------------------->
         <div id="rightpart">
                                    
-                    
+            <from name="info_form" id="info_form">        
             <div id="righttop">基本信息<span id="must">(<font color="#FF0000">&nbsp;*&nbsp;</font>为必填&nbsp;)</span></div>
             <hr style="width:785px"/>
             <div id="topdown">以下信息将显示在<a href="#">个人资料页</a>，方便大家了解你</div>
@@ -311,14 +305,14 @@ function preview(img, selection) {
              <div id="uploader">
                     <form name="" id="upload_form" method="post" enctype="multipart/form-data"  >
                         <div>
-                            <input name="photo" id="file"  size="27" type="file" multiple="multiple"  accept="image/gif, image/jpeg,image/x-png"/>
-                            <input id = "upload_but" name="action" value="上传" type="submit"/>
+                            <input name="photo" id="file"  size="27" type="file" multiple="multiple"  accept="image/gif, image/jpeg,image/x-png" form="upload_form"/>
+                            <input id = "upload_but" name="action" value="上传" type="submit" form="upload_form"/>
                          
                            
-                                 <input type="hidden" id="y1" class="y1" name="y1" />
-                                <input type="hidden" id="x1" class="x1" name="x1" />
-                                <input type="hidden" id="y2" class="y2" name="y2" />
-                                <input type="hidden" id="x2" class="x2" name="x2" />
+                                 <input type="hidden" id="y1" class="y1" name="y1" form="upload_form"/>
+                                <input type="hidden" id="x1" class="x1" name="x1" form="upload_form"/>
+                                <input type="hidden" id="y2" class="y2" name="y2" form="upload_form"/>
+                                <input type="hidden" id="x2" class="x2" name="x2" form="upload_form"/>
                         </div>   
                      
                     </br>
@@ -354,6 +348,21 @@ function preview(img, selection) {
                 <input name="sex" id="sex" type="radio" value="0"/>女
             </div>
             </span>
+            <span>
+            <div id="midleft2">年龄：</div>
+            <div id="midright2">
+                <input type="range" name="age" id="age" min="0" max="100" step="1" value="0" onchange="display_age.value=this.value">
+                <output name="display_age" id="display_age" for="age"></output>
+
+            </div>
+            </span>
+            <span>
+            <div id="midleft2">备用邮箱：</div>
+            <div id="midright2">
+                <input type="email" name="email" id="email">
+                
+            </div>
+            </span>
              <span>
             <div id="midleft2">生日：</div>
             <div id="midright3">
@@ -385,7 +394,8 @@ function preview(img, selection) {
             </span>
             
             
-            <span id="correct"><button type="submit" id="save" name="save"><span>保存</span></button></span>
+            <span id="correct"><button type="submit" id="save" name="save" form="info_form"><span>保存</span></button></span>
+          </form>
         </div>
         
     <div id="footer">
