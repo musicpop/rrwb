@@ -1,7 +1,7 @@
 // JavaScript Document
  
 
-	function check_mobile(mobile){
+function check_mobile(mobile){
 
 		if(mobile.length != 11 || isNaN(mobile)){
 

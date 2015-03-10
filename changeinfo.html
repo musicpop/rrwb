@@ -14,6 +14,7 @@ $(document).ready(function() {
    //-------------------加载省份 城市数据---------------------------------------
    $("select[name=province]").append("<option value='0'>请选择..</option>");
    $("select[name=city]").append("<option value='0'>请选择..</option>");
+    
    $.ajax({
     url: '/rrwb/xml/Provinces.xml',
     type: 'GET',
@@ -75,9 +76,11 @@ $(document).ready(function() {
             $('input[name=blog]').val(response.blog);
             $('input[name=qq]').val(response.qq);
             $('input[name=msn]').val(response.msn); 
-            $("#crop_preview").removeAttr("style")
+            $("#crop_preview").removeAttr("style");
             $("#crop_preview").attr("src", response.img) ;
-     
+            $("#age").val(response.age);
+            $("#display_age").val(response.age);
+            $("#other_email").val(response.other_email);
     })
     .fail(function() {
       console.log("error");
@@ -88,7 +91,7 @@ $(document).ready(function() {
   //-----------------------------------------------------------------------------
   //--------------------保存提交-------------------------------------------------
  
-  $("#save").click(function(e) {
+  $("#send").click(function(e) {
         e.preventDefault();
         $.ajax({
           url: 'http://localhost:8080/rrwb/crud/user/edit',
@@ -106,7 +109,9 @@ $(document).ready(function() {
                 img:$("#crop_preview").attr("src"),
                 msn:$('input[name=msn]').val(),
                 qq:$('input[name=qq]').val(),
-                blog:$('input[name=blog]').val()},
+                blog:$('input[name=blog]').val(),
+                other_email:$('input[name=other_email]').val(),
+                age:$('input[name=age]').val()}
         })
         .done(function(response) {
           if(response.code == 1 ){
@@ -138,7 +143,7 @@ $(document).ready(function() {
      $('#big_view').imgAreaSelect({ aspectRatio: '1:1', handles: true,
         fadeSpeed: 200, onSelectChange: preview });
 
-     $("#upload_form").submit(function(e) {
+     $("#uploadForm").submit(function(e) {
         if(window.FormData !== undefined)  // for HTML5 browsers
         {
             var formData = new FormData(this);
@@ -236,6 +241,9 @@ function preview(img, selection) {
 </head>
 
 <body>
+
+
+
    <!--Begin:头部开始--> 
   <header id="global_header">
              <div class="header">
@@ -282,9 +290,10 @@ function preview(img, selection) {
     <!---------------------- end 左部-------------------------------->
 
     <!---------------------- begin 右部-------------------------------->
+
         <div id="rightpart">
                                    
-            <from name="info_form" id="info_form">        
+                  
             <div id="righttop">基本信息<span id="must">(<font color="#FF0000">&nbsp;*&nbsp;</font>为必填&nbsp;)</span></div>
             <hr style="width:785px"/>
             <div id="topdown">以下信息将显示在<a href="#">个人资料页</a>，方便大家了解你</div>
@@ -292,32 +301,32 @@ function preview(img, selection) {
                       <img id="crop_preview" src=""/>   
                                 </div>      
           <span>
-            <div id="midleft">登录名：</div>
+            <div id="midleft"><label for="login_name">登录名：</label></div>
                 <input type="hidden" id="_id" class="y1" name="_id" />
-                <div id="midright"><input id="login_name" name="login_name" type="text" value="" maxlength="8" readonly/></div>
+                <div id="midright"><input id="login_name" name="login_name" type="text" value="" maxlength="8" readonly  form="infoForm"/></div>
             </span>
             <span>
-            <div id="midleft2"><font color="#FF0000">*</font>昵称：</div>
-            <div id="midright2"><input name="nick_name"  type="text" value="" maxlength="8" required/></div>
+            <div id="midleft2"><font color="#FF0000">*</font><label for="nick_name">昵称：</label></div>
+            <div id="midright2"><input id="nick_name" name="nick_name"  type="text" value="" maxlength="8" required autofocus form="infoForm" maxlength="8"/></div>
             </span>
             <span>
             <div id="midleft2">头像：</div>
              <div id="uploader">
-                    <form name="" id="upload_form" method="post" enctype="multipart/form-data"  >
+                    <form name="" id="uploadForm" method="post" enctype="multipart/form-data"  >
                         <div>
-                            <input name="photo" id="file"  size="27" type="file" multiple="multiple"  accept="image/gif, image/jpeg,image/x-png" form="upload_form"/>
-                            <input id = "upload_but" name="action" value="上传" type="submit" form="upload_form"/>
+                            <input name="photo" id="file"  size="27" type="file" multiple="multiple"  accept="image/gif, image/jpeg,image/x-png" form="uploadForm"/>
+                            <input id = "upload_but" name="upload_but" value="上传" type="submit" form="uploadForm"/>
                          
                            
-                                 <input type="hidden" id="y1" class="y1" name="y1" form="upload_form"/>
-                                <input type="hidden" id="x1" class="x1" name="x1" form="upload_form"/>
-                                <input type="hidden" id="y2" class="y2" name="y2" form="upload_form"/>
-                                <input type="hidden" id="x2" class="x2" name="x2" form="upload_form"/>
+                                 <input type="hidden" id="y1" class="y1" name="y1" form="uploadForm"/>
+                                <input type="hidden" id="x1" class="x1" name="x1" form="uploadForm"/>
+                                <input type="hidden" id="y2" class="y2" name="y2" form="uploadForm"/>
+                                <input type="hidden" id="x2" class="x2" name="x2" form="uploadForm"/>
                         </div>   
                      
                     </br>
                          <div id="div_big_view" >
-                            <img id="big_view" src="" />
+                            <img id="big_view" src="" form="infoForm"/>
                          </div>
 
                         
@@ -326,40 +335,40 @@ function preview(img, selection) {
                 </div>
             </span>  
             <span>
-            <div id="midleft2">真实姓名：</div>
+            <div id="midleft2"><font color="#FF0000">*</font><label for="real_name">真实姓名：</label></div>
             <div id="midright2">
-                <input id="real_name" name="real_name" type="text" value="" maxlength="8" required/>
+                <input id="real_name" name="real_name" type="text" value="" maxlength="8" required form="infoForm"/>
                  
             </div>
             </span>
             <span>
-            <div id="midleft2"><font color="#FF0000">*</font>所在地：</div>
+            <div id="midleft2"><font color="#FF0000">*</font><label for="province">所在地：</label></div>
             <div id="midright3">
-         <select name="province" id="province" >
+         <select name="province" id="province" form="infoForm">
           
          </select>&nbsp;
-         <select name="city" id="city" > 
+         <select name="city" id="city" form="infoForm"> 
          </select></div>
             </span>
              <span>
-            <div id="midleft2"><font color="#FF0000">*</font>性别：</div>
+            <div id="midleft2"><font color="#FF0000">*</font><label for="gender">性别：</label></div>
           <div id="midright4">
-                <input name="sex" id="sex" type="radio" value="1" checked="checked"/>男
-                <input name="sex" id="sex" type="radio" value="0"/>女
+                <input name="gender"  type="radio" value="1" checked="checked" form="infoForm"/>男
+                <input name="gender"  type="radio" value="0" form="infoForm"/>女
             </div>
             </span>
             <span>
-            <div id="midleft2">年龄：</div>
+            <div id="midleft2"><label for="age">年龄：</label></div>
             <div id="midright2">
-                <input type="range" name="age" id="age" min="0" max="100" step="1" value="0" onchange="display_age.value=this.value">
-                <output name="display_age" id="display_age" for="age"></output>
+                <input type="range" name="age" id="age" min="0" max="100" step="1" value="0" onchange="display_age.value=this.value" form="infoForm">
+                <output name="display_age" id="display_age" for="age" form="infoForm"></output>
 
             </div>
             </span>
             <span>
-            <div id="midleft2">备用邮箱：</div>
+            <div id="midleft2"><label for="email">备用邮箱：</label></div>
             <div id="midright2">
-                <input type="email" name="email" id="email">
+                <input type="email" name="other_email" id="other_email" placeholder="请输入邮箱地址" form="infoForm">
                 
             </div>
             </span>
@@ -367,13 +376,13 @@ function preview(img, selection) {
             <div id="midleft2">生日：</div>
             <div id="midright3">
          
-              <input type="date" name="birthday" />
+              <input type="date" name="birthday" form="infoForm"/>
             </div>
           </span>
           <span>
             <div id="midleft2">博客地址：</div>
             <div id="midright2">
-                <input name="blog" type="text" value=""/>
+                <input name="blog" type="text" value="" form="infoForm"/>
                  
             </div>
           </span>
@@ -381,21 +390,24 @@ function preview(img, selection) {
              <span>
             <div id="midleft2">QQ：</div>
             <div id="midright2">
-            <input name="qq" type="text" value=""/>
+            <input name="qq" type="number" value="" form="infoForm"/>
            
             </div>
             </span>
              <span>
             <div id="midleft2">MSN：</div>
             <div id="midright2">
-                <input name="msn" type="text" value=""/>
+                <input name="msn" type="text" value="" form="infoForm"/>
                 
             </div>
             </span>
             
             
-            <span id="correct"><button type="submit" id="save" name="save" form="info_form"><span>保存</span></button></span>
-          </form>
+            <span id="correct"><form method="post" enctype="multipart/form-data" name="infoForm" id="infoForm">
+                <button type="submit" name="send" id="send" value=""><span>保存</span></button>
+            </form>
+             </span>
+         
         </div>
         
     <div id="footer">

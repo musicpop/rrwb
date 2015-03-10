@@ -158,6 +158,12 @@ body{
 	float:left;
 	border:1px solid #CCCCCC;
 }
+
+.cont_ontleft img{
+	width:100px;
+	height:100px;
+}
+
 .cont_oneright{
 	width:130px;
 	height:110px;
