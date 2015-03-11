@@ -22,7 +22,7 @@
     last_refresh_time:(new Date()).getTime(),
     last_more_time:(new Date()).getTime()
     }; 
-  var followedTemplate = '<li class="cont_threemain"><img src="{img}" class="cont_threeuser" /> <div class="cont_threename"><a href="/rrwb/friend.html?fans_id='+getWindowParam("_id")+'&followed_id={_id}" >{nick_name}</a></div></li>';
+  var followedTemplate = '<li class="cont_threemain"><img src="{img}" class="cont_threeuser" /> <div class="cont_threename"><a href="/rrwb/friend.html?fans_id='+sessionStorage.userId+'&followed_id={_id}" >{nick_name}</a></div></li>';
   $.addTemplateFormatter({
         DateTimeFormatter : function(value, template) {
       var cTime = new Date(value)
@@ -30,16 +30,18 @@
         }
 });
   $(document).ready(function() {
-    $('#changeinfo_a').attr('href','changeinfo.html?_id='+getWindowParam("_id"));
+    $('#changeinfo_a').attr('href','changeinfo.html');
     $.ajax({
       url: 'http://localhost:8080/rrwb/crud/user/show',
       type: 'POST',
       dataType: 'json',
-      data: {_id: getWindowParam("_id")},
+      data: {_id: sessionStorage.userId},
     })
     .done(function(response) {
-      if(response._id == getWindowParam("_id")){
-        $('#province_city').text(response.provinceName+' '+response.cityName);
+      if(response._id == sessionStorage.userId){
+    
+        $('#province_city').text((response.provinceName?response.provinceName:'') +' '+
+          (response.cityName?response.cityName:''));
         $('#nick_name').text(response.nick_name);
  
         $('.cont_ontleft img').attr({
@@ -148,7 +150,7 @@
           url: 'http://localhost:8080/rrwb/crud/weibo/add',
           type: 'post',
           dataType: 'json',
-          data: {user_id:getWindowParam("_id"),
+          data: {user_id:sessionStorage.userId,
                  user_nickName:$('#nick_name').text(), 
                 content:$('#weiboTextArea').val(),                 
                 img:$("#uploaded_image").val(),
@@ -192,7 +194,7 @@
   //-------------------------------------------------------------------------------
   $('#search_a').click(function(event) {
     if($('#search_text').val() != ''){
-      window.open('/rrwb/guangchang.html?_id='+getWindowParam("_id")+'&nick_name='+$('#search_text').val(),"_blank");
+      window.open('/rrwb/guangchang.html?_id='+sessionStorage.userId+'&nick_name='+$('#search_text').val(),"_self");
     }
     e.preventDefault();
   });
@@ -205,7 +207,7 @@
       url: 'http://localhost:8080/rrwb/crud/weibo/latest_weibos',
       type: 'post',
       dataType: 'json',
-      data: {user_id: getWindowParam("_id"),page:1,size:100,currentTime:defaults.last_refresh_time},
+      data: {user_id: sessionStorage.userId,page:1,size:100,currentTime:defaults.last_refresh_time},
     })
     .done(function(response) {
       if(response.code == 1 && response.rows > 0){
@@ -229,7 +231,7 @@
       url: 'http://localhost:8080/rrwb/crud/weibo/followed_weibos',
       type: 'post',
       dataType: 'json',
-      data: {user_id: getWindowParam("_id"),page:defaults.currentWeiboPage,size:defaults.currentWeiboSize,last_More_Time:defaults.last_more_time},
+      data: {user_id: sessionStorage.userId,page:defaults.currentWeiboPage,size:defaults.currentWeiboSize,last_More_Time:defaults.last_more_time},
     })
     .done(function(response) {
       if(response.code == 1 && response.rows > 0){
@@ -256,7 +258,7 @@
       url: 'http://localhost:8080/rrwb/crud/fans/followspage',
       type: 'post',
       dataType: 'json',
-      data: {fans_id: getWindowParam("_id"),page:1,size:100},
+      data: {fans_id: sessionStorage.userId,page:1,size:100},
     })
     .done(function(response) {
       if(response.code == 1 && response.rows > 0){
@@ -311,8 +313,8 @@
               <div class="header_logo"><img src="images/logo_update_02.png" width="190" height="34" />    </div>
               <div class="header_Llist">
                     <ul>
-                        <li><a href="#">首页</a></li>
-                        <li><a href="guangchang.html" target="_blank">广场</a></li>
+                        <li><a href="index.html" target="_self">首页</a></li>
+                        <li><a href="guangchang.html" target="_self">广场</a></li>
                         
                         <li><a href="game.html" target="_blank">游戏</a></li>
                     </ul>
@@ -328,7 +330,7 @@
                     <ul>
  
                         <li><a href="#">消息</a></li>
-                        <li><a id="changeinfo_a" href="changeinfo.html" target="_blank">修改资料</a></li>
+                        <li><a id="changeinfo_a" href="changeinfo.html" target="_self">修改资料</a></li>
                     </ul>
               </div>
         </div>
