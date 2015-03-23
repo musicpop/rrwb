@@ -575,7 +575,7 @@ display:block;
 	height:100px;background:#fff;padding:2px;border:1px solid #E5E5E5;display:inline-block;margin:10px 20px 0 0;position:relative;}
  .photoBox img{width:100px;
 	height:100px;}
- .loadingBox{background:#fff;*filter:alpha(opacity=30);text-align:center;margin:-8px 0 0 -8px;display:inline-block;}
+ .loadingBox{background:#fff;*filter:alpha(opacity=30);text-align:center;margin:-8px 0 0 -8px;display:none;}
  .loading{background:url(../images/loading_16.gif) no-repeat 0 0;width:16px;height:16px;display:inline-block;}
  
  .photoArea{width:400px;

@@ -90,12 +90,24 @@
 	    <servlet-class>com.example.web.UploadServlet</servlet-class>
 	  </servlet>
 	   
-
-
-	  <servlet-mapping>
+	   <servlet-mapping>
 	    <servlet-name>uploadServlet</servlet-name>
 	    <url-pattern>/crud/uploadServlet</url-pattern>
-	  </servlet-mapping>
+	  </servlet-mapping>	  
+
+	  
+	
+	<servlet>
+	    <servlet-name>uploadWeiboServlet</servlet-name>
+	    <servlet-class>com.example.web.UploadWeiboServlet</servlet-class>
+	  </servlet>
+	   
+	<servlet-mapping>
+	    <servlet-name>uploadWeiboServlet</servlet-name>
+	    <url-pattern>/crud/uploadWeiboServlet</url-pattern>
+	 </servlet-mapping>
+
+	 
 	<!-- eliminate welcome files -->
 	<!-- useful for Servlet 3 container (Tomcat 7 and Jetty 6) -->
 	<welcome-file-list>

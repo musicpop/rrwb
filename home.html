@@ -13,14 +13,12 @@
       allowed: 140,   
       warning: 25, 
       cssWarning: 'warning',
-      cssExceeded: 'exceeded', 
-      counterText: '',
       weiboPages:0,
       currentWeiboPage:1,
       currentWeiboSize:6,
       friendPages:0, 
-    last_refresh_time:(new Date()).getTime(),
-    last_more_time:(new Date()).getTime()
+      last_refresh_time:(new Date()).getTime(),
+      last_more_time:(new Date()).getTime()
     }; 
   var followedTemplate = '<li class="cont_threemain"><img src="{img}" class="cont_threeuser" /> <div class="cont_threename"><a href="/rrwb/friend.html?fans_id='+sessionStorage.userId+'&followed_id={_id}" >{nick_name}</a></div></li>';
   $.addTemplateFormatter({
@@ -56,7 +54,8 @@
     .always(function() {
       console.log("complete");
     });
-    $("#weiboTextArea").change(function(event) {
+    $("#weiboTextArea").on('keyup', function(event) {
+      event.preventDefault();
       var count = $(this).val().length;
       var available = defaults.allowed - count;
       if(available <= defaults.warning && available >= 0){
@@ -64,13 +63,9 @@
       } else {
         $(".aviableCount span").removeClass(defaults.cssWarning);
       }
-      if(available < 0){
-        $(".aviableCount span").addClass(defaults.cssExceeded);
-      } else {
-        $(".aviableCount span").removeClass(defaults.cssExceeded);
-      }
+    
       $(".aviableCount span").html(available);
-    });
+    }); 
     //--------------------------------------------------------
     $("#file").change(function(event) {
        if($("#file").val()!=''){
@@ -87,7 +82,7 @@
         {
             var formData = new FormData(this);
             $.ajax({
-                url: 'http://localhost:8080/rrwb/crud/uploadServlet',
+                url: 'http://localhost:8080/rrwb/crud/uploadWeiboServlet',
                 type: 'POST',
                 mimeType:"multipart/form-data",
                 data:formData,
@@ -286,11 +281,17 @@
         load.show();
         var img = obj.next().find('img');
         if (img.attr('src') === '') {
-            img.attr('src', obj.find('img').attr('src').replace('_small.', '.'));
-            img.load(function() {
+            img.attr('src', obj.find('img').attr('src').replace('_small.', '_big.'));
+             if (img.attr('src') === '') {
+                 obj.hide();
+                 load.hide();
+             }else{
+              img.load(function() {
                 obj.hide();
                 obj.next().show();
-            });
+              });
+             }
+            
         } else {
             obj.hide();
             obj.next().show();
@@ -489,23 +490,24 @@
 <script type="text/html" id="template">
  
     <div class="cont_down41">
-              <div class="cont_down4_a"><img  data-src="user_head_img" class="picture1" /></div>
-              <div class="cont_down4_b"><div class="fo" data-content="user_nickName"></div>
-              <div data-content="content"></div>
-              <div class="photoBox">
-               
-                <img data-src="img" class="zoom" onclick="zoom_image($(this).parent());"/>
-              </div> 
+      <div class="cont_down4_a"><img  data-src="user_head_img" class="picture1" /></div>
+      <div class="cont_down4_b">
+        <div class="fo" data-content="user_nickName"></div>
+        <div data-content="content"></div>
+        <div class="photoBox">
+          <div class="loadingBox">
+              <span class="loading"></span>
+          </div>
+          <img data-src="img" class="zoom" onclick="zoom_image($(this).parent());"/>
+        </div> 
               
-              <div class="photoArea" style="display:none;">
-                 <img src="" class="minifier" onclick="zoom_image($(this).parent());" />
-                 
-              </div> 
-        <div>
+        <div class="photoArea" style="display:none;">
+          <img src="" class="minifier" onclick="zoom_image($(this).parent());" />
+        </div> 
+      <div>
         <time data-content="timestamp" data-format="DateTimeFormatter"></time>
-        </div>
-</div>
-           </div>
+    </div>
+ 
 </script>
 </body>
 </html>
